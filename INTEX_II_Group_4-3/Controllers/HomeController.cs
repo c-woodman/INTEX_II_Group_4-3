@@ -19,6 +19,11 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+
         public IActionResult Shop()
         {
             return View();

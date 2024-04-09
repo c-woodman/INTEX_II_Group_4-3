@@ -2,7 +2,60 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="image-background">
+    <div class="overlay-text">
+        Spark Your Imagination, <br>
+        <span class="nowrap">Brick by Brick with <span class="colorful letter">A</span><span class="colorful letter">u</span><span class="colorful letter">r</span><span class="colorful letter">o</span><span class="colorful letter">r</span><span class="colorful letter">a</span></span>
+
+        <a href="@Url.Action("Shop", "Home")" class="image-button target-element">
+            <div class="half-break"></div>
+            <img src="/lib/img/legoButton.png" alt="Button Image" />
+        </a>
+    </div>
 </div>
+
+<div class="parallax">
+    <div class="text-box">
+        <p>Featured build</p>
+        <h2>Product Name</h2>
+        <a href='#' class="ghostButton">View Details</a>
+    </div>
+</div>
+
+<br><br>
+<div class="container">
+    <h3>Recommended</h3>
+    <br><br>
+    <div class="product-row">
+        <div class="product-card">
+            <img src="path-to-your-image1.jpg" alt="Product 1">
+            <p>Product Title 1</p>
+        <p style="font-weight: bold;">$19.99</p>
+        </div>
+        <div class="product-card">
+            <img src="path-to-your-image2.jpg" alt="Product 2">
+            <p>Product Title 2</p>
+        <p style ="font-weight: bold;">$29.99</p>
+        </div>
+        <div class="product-card">
+            <img src="path-to-your-image3.jpg" alt="Product 3">
+            <p>Product Title 3</p>
+        <p style="font-weight: bold;">$39.99</p>
+        </div>
+        <div class="product-card">
+            <img src="path-to-your-image4.jpg" alt="Product 4">
+            <p>Product Title 4</p>
+        <p style="font-weight: bold;">$49.99</p>
+        </div>
+    </div>
+    <br><br>
+    
+    <div style="text-align: center;">
+        <a href="/Home/Shop" class="button">Explore</a>
+    </div>
+
+
+    <br><br>
+    <br><br>
+</div>
+

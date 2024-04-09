@@ -1,22 +1,452 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Beth+Ellen&display=swap');
+
+
+:root {
+    --lightYellow: #FFF4C9;
+    --yellow: #FFE26F;
+    --black: #3F3F3F;
+    --mint: #F1FFFC;
+    --green: #479B88;
+}
+
+.shopping-cart {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+    .shopping-cart h2 {
+        color: #333;
+        text-align: center;
+    }
+
+.cart-items {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.item-image {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.item-info {
+    flex-grow: 1;
+}
+
+.item-name {
+    margin: 0;
+    font-size: 18px;
+    color: #000;
+}
+
+.item-price {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.item-quantity input {
+    width: 60px;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.remove-item {
+    background-color: #ff4040;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.cart-summary {
+    text-align: right;
+}
+
+    .cart-summary h3 {
+        margin: 0;
+        font-size: 20px;
+        color: #333;
+    }
+
+.checkout {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+.pagination {
+    display: flex;
+}
+
+.page {
+    text-decoration: none;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 45px;
+    margin: -1px;
+    background-color: white;
+    border: 1px solid black;
+    position: relative;
+}
+
+    .page:before {
+        content: '';
+        width: 19px;
+        height: 10px;
+        background-color: white;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        position: absolute;
+        top: -5px;
+        left: 10px;
+        transform: translateY(-40%);
+        z-index: -1;
+    }
+
+    .page.active, .page:hover {
+        background-color: #FFF4C9;
+        color: #000;
+        font-weight: bold;
+    }
+
+        .page.active:before, .page:hover:before {
+            background-color: #FFF4C9;
+        }
+
+h1 {
+    color: var(--black);
+    font-family: 'DM Serif Display', sans-serif;
+    font-size: 50px;
+}
+
+h2 {
+    font-size: 50px;
+    color: var(--green);
+    font-weight: 700;
+}
+
+h3 {
+    color: var(--black);
+    font-family: 'DM Serif Display', sans-serif;
+    font-size: 30px;
+}
+
+a {
+    color: inherit; /* Makes the link's color the same as its parent */
+    text-decoration: none; /* Removes the underline from links */
+    background-color: transparent; /* Ensures there is no background color */
+}
+
+    a, a:hover {
+        color: inherit; /* Keeps the link color the same on hover */
+        text-decoration: none; /* Optional: removes underline on hover as well */
+    }
+
+
+.product-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.product-card {
+    flex: 1; /* Ensures each card has equal width */
+    text-align: center; /* Center-aligns the text */
+    padding: 20px; /* Adds some padding around the card content */
+}
+
+    .product-card img {
+        width: 100%; /* Makes the image fully responsive within its container */
+        height: auto; /* Maintains the aspect ratio of the image */
+        margin-bottom: 15px; /* Adds some space between the image and the title */
+    }
+
+    /* Removes borders from images and other elements */
+    .product-card, .product-card img {
+        border: none;
+    }
+
+.button {
+    background-color: var(--yellow);
+    color: #7A6200;
+    border: none;
+    padding: 10px 60px; /* Padding inside the button */
+    font-size: 16px; /* Font size */
+    border-radius: 50px; /* Fully rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    user-select: none; /* Prev ents text selection */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth color and transform transition */
+    font-weight: 700;
+}
+
+    .button:hover {
+        background-color: #FFBF00; /* Darker blue background on hover */
+    }
+
+    .button:active {
+        transform: scale(0.95); /* Slight decrease in size on click */
+    }
+
+.ghostButton {
+    background-color: white; /* Blue background */
+    color: #FFBF00; /* yellow text */
+    border: 2px solid var(--yellow); /* Darker blue border */
+    padding: 10px 60px; /* Padding inside the button */
+    font-size: 16px; /* Font size */
+    border-radius: 50px; /* Fully rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    outline: none; /* Removes the outline */
+    user-select: none; /* Prevents text selection */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth color and transform transition */
+    font-weight: 700;
+}
+
+    .ghostButton:hover {
+        background-color: #FFF2BF; /* light blue background on hover */
+    }
+
+    .ghostButton:active {
+        transform: scale(0.95); /* Slight decrease in size on click */
+    }
+
+.half-break {
+    display: block;
+    margin-top: 0.75em;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+/* A */
+.colorful:nth-child(1) {
+    color: #51B59F;
+}
+/* u */
+.colorful:nth-child(2) {
+    color: #FFBF00;
+}
+/* r */
+.colorful:nth-child(3) {
+    color: #5271FF;
+}
+/* o */
+.colorful:nth-child(4) {
+    color: #F06525;
+}
+/* r */
+.colorful:nth-child(5) {
+    color: #FFBF00;
+}
+/* a */
+.colorful:nth-child(6) {
+    color: #5271FF;
+}
+
+.letter {
+    display: inline; /* Ensures letters stay in line */
+    margin-right: -2px; /* Adjust as needed to control space between letters */
+}
+
+
+
+.image-button img {
+    width: 280px; /* Adjust the width as needed to make the image smaller */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */
+    display: block; /* Ensures the image doesn't have extra space around it */
+}
+
+.image-button:hover img {
+    transform: translateY(-5px); /* Moves the image up slightly on hover */
+    box-shadow: 0px 6px 3px rgba(0, 0, 0, 0.2);
+}
+
+
+a img {
+    border: 0px solid transparent; /* No border by default */
+    cursor: pointer; /* Change cursor to indicate clickability */
+}
+
+
+.custom-col {
+    padding-right: 30px; /* Adjust as needed */
+    padding-left: 30px; /* Adjust as needed */
+}
+
+.custom-container {
+    padding: 30px; /* Increased from Bootstrap's default */
+}
+
+
+.custom-img {
+    margin-bottom: 20px; /* Increases bottom margin of the image */
+    padding-right: 30px;
+}
+
+.custom-heading {
+    margin-bottom: 40px; /* Increases space below the heading */
+}
+
+.custom-paragraph {
+    padding-bottom: 20px; /* Adds more space at the bottom of each paragraph */
+}
+
+
+.image-background {
+    position: relative;
+    width: 100%; /* Set the width of the container */
+    height: 500px; /* Set the height of the container */
+    background-image: url('/lib/img/lego.jpeg'); /* Path to your image */
+    background-size: cover; /* Cover the entire container */
+    background-position: center; /* Center the background image */
+}
+
+.overlay-text {
+    position: absolute; /* Position relative to the parent .image-background */
+    top: 50%; /* Center vertically */
+    left: 30%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust to perfectly center */
+    font-size: 50px; /* Text size */
+    text-align: left; /* Align text */
+    font-family: 'DM Serif Display', sans-serif;
+}
+
+/* Parallax Background CSS */
+.parallax {
+    background-image: url("/lib/img/background.jpg");
+    height: 60vh; /* Consider adjusting this if you want a different height */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative; /* Ensure this is set to position the text box absolutely within */
+}
+
+/* Style the text box */
+.text-box {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: var(--mint); /* Make sure --mint is defined in your :root or somewhere in the CSS */
+    margin: 40px;
+    padding: 60px;
+    padding-left: 80px;
+    padding-right: 80px;
+    border-radius: 25px;
+}
+
+
+/* Add custom CSS styles for the navbar */
+.navbar {
+    background-color: var(--lightYellow); /* Set background color to light yellow */
+}
+
+.navbar-nav {
+    justify-content: flex-end; /* Align items to the right */
+}
+
+    .navbar-nav .nav-item {
+        margin-left: 10px; /* Add some spacing between nav items */
+    }
+
+.navbar-brand {
+    color: var(--black); /* Set navbar brand color */
+}
+
+.nav-link {
+    color: var(--black); /* Set nav links color */
+}
+
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 100px;
+    font-family: 'Baloo Thambi 2', sans-serif;
+    font-size: 16px;
+    color: var(--black)
+}
+
+footer {
+    background-color: #697AC7; /* This is a Bootstrap dark background color, adjust the color to match the exact shade you need */
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 30px;
+}
+
+    footer p, footer a {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0;
+        color: white; /* Ensures the text color is consistent for both elements */
+        text-decoration: none;
+    }
+
+        footer a:hover {
+            color: #dcdcdc; /* Color for link on hover */
+            text-decoration: underline; /* Adds underline on hover */
+        }
+
+.d-flex.flex-column {
+    min-height: 100vh; /* Ensures the flex container is at least as tall as the viewport */
+}
+
+.flex-shrink-0 {
+    flex-shrink: 0; /* Prevents the main content from shrinking */
+}
+
+.mt-auto {
+    margin-top: auto; /* Pushes the footer to the bottom */
 }

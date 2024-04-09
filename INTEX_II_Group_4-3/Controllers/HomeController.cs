@@ -1,4 +1,5 @@
 using INTEX_II_Group_4_3.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,7 +19,33 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
+        public IActionResult Shop()
+        {
+            return View();
+        }
+
+        public IActionResult Cart()
+        {
+            return View();
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Confirmation()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Fraudulent()
         {
             return View();
         }

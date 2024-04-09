@@ -8,7 +8,8 @@ namespace INTEX_II_Group_4_3.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
-        public DbSet<Product> Products { get; set; }
     }
 }
+

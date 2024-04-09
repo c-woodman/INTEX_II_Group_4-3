@@ -1,40 +1,14 @@
-﻿@model IEnumerable<INTEX_II_Group_4_3.Models.Product>
+﻿@{    
+    ViewData["Title"] = "Shop";
+}
+<h1>
+    Explore <span class="nowrap"><span class="colorful letter">A</span><span class="colorful letter">u</span><span class="colorful letter">r</span><span class="colorful letter">o</span><span class="colorful letter">r</span><span class="colorful letter">a</span></span>’s Top Picks
+</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>Product ID</th>
-            <th>Name</th>
-            <th>Year</th>
-            <th>Parts</th>
-            <th>Price</th>
-            <th>Image Link</th>
-            <th>Primary Color</th>
-            <th>Secondary Color</th>
-            <th>Description</th>
-            <th>Category</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.ProductId</td>
-                <td>@product.Name</td>
-                <td>@product.Year</td>
-                <td>@product.NumParts</td>
-                <td>@product.Price.ToString("C")</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(product.ImgLink))
-                    {
-                        <a href="@product.ImgLink">View Image</a>
-                    }
-                </td>
-                <td>@product.PrimaryColor</td>
-                <td>@product.SecondaryColor</td>
-                <td>@product.Description</td>
-                <td>@product.Category</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<br>
+<div class="pagination">
+    <a href="#" class="page active">1</a>
+    <a href="#" class="page">2</a>
+    <a href="#" class="page">3</a>
+    <a href="#" class="page">4</a>
+</div>

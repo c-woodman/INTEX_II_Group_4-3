@@ -30,6 +30,11 @@ namespace INTEX_II_Group_4_3.Controllers
             var products = await _context.Products.ToListAsync();
             return View(products);
         }
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+
         public IActionResult Shop()
         {
             return View();

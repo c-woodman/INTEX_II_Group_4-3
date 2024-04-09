@@ -9,5 +9,6 @@ namespace INTEX_II_Group_4_3.Data
             : base(options)
         {
         }
+        public DbSet<Product> Products { get; set; }
     }
 }

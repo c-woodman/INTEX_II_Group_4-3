@@ -1,17 +1,23 @@
 using INTEX_II_Group_4_3.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SQLitePCL;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace INTEX_II_Group_4_3.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private LegoInfoContext _context;
+     
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, LegoInfoContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -19,6 +25,11 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Products()
+        {
+            var products = await _context.Products.ToListAsync();
+            return View(products);
+        }
         public IActionResult Shop()
         {
             return View();

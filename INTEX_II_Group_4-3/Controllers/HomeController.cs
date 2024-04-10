@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SQLitePCL;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using INTEX_II_Group_4_3.Models.ViewModels;
 
 
 namespace INTEX_II_Group_4_3.Controllers
@@ -17,11 +18,27 @@ namespace INTEX_II_Group_4_3.Controllers
             _repo = temp;
         }
 
-        public IActionResult Shop()
+        public IActionResult Shop(int pageNum)
         {
-            var productData = _repo.Products;
+            int pageSize = 5;
+            pageNum = Math.Max(pageNum, 1);
 
-            return View(productData);
+            var blah = new ProductsListViewModel
+            {
+                Products = _repo.Products
+                .OrderBy(x => x.Name)
+                .Skip((pageNum - 1) * pageSize)
+                .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Products.Count()
+                }
+            };
+
+            return View(blah);
         }
 
         //private readonly ILogger<HomeController> _logger;

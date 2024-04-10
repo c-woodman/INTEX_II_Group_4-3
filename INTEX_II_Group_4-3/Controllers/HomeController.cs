@@ -36,7 +36,7 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Products()
+        public IActionResult Products()
         {
             //var products = await _context.Products.ToListAsync();
             ////return View(products);
@@ -83,8 +83,8 @@ namespace INTEX_II_Group_4_3.Controllers
         public IActionResult Checkout()
         {
             //autofill name from Customer table
-            ViewBag.first_name = _context.Customers.ToList();
-            ViewBag.last_name = _context.Customers.ToList();
+            //ViewBag.first_name = _context.Customers.ToList();
+            //ViewBag.last_name = _context.Customers.ToList();
             return View("Checkout");
         }
 
@@ -92,8 +92,8 @@ namespace INTEX_II_Group_4_3.Controllers
         [HttpPost]
         public IActionResult Order(Order response)
         {
-            _context.Orders.Add(response);
-            _context.SaveChanges();
+           // _context.Orders.Add(response);
+            //_context.SaveChanges();
 
             return View("Confirmation", response);
 

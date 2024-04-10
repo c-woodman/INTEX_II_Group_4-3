@@ -10,15 +10,26 @@ namespace INTEX_II_Group_4_3.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private LegoInfoContext _context;
-     
+        private ILegoRepository _repo;
 
-        public HomeController(ILogger<HomeController> logger, LegoInfoContext context)
+        public HomeController(ILegoRepository temp)
         {
-            _logger = logger;
-            _context = context;
+            _repo = temp;
         }
+
+        public IActionResult Shop()
+        {
+            var productData = _repo.Products;
+
+            return View(productData);
+        }
+
+        //private readonly ILogger<HomeController> _logger;
+        //public HomeController(ILogger<HomeController> logger, LegoInfoContext context)
+        //{
+        //    _logger = logger;
+        //    _context = context;
+        //}
 
         public IActionResult Index()
         {
@@ -27,18 +38,17 @@ namespace INTEX_II_Group_4_3.Controllers
 
         public async Task<IActionResult> Products()
         {
-            var products = await _context.Products.ToListAsync();
-            return View(products);
+            //var products = await _context.Products.ToListAsync();
+            ////return View(products);
+
+            return View();
         }
         public IActionResult Checkout()
         {
             return View();
         }
 
-        public IActionResult Shop()
-        {
-            return View();
-        }
+
 
         public IActionResult Cart()
         {

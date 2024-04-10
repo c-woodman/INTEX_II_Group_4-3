@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using SQLitePCL;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using INTEX_II_Group_4_3.Models.ViewModels;
-
 
 namespace INTEX_II_Group_4_3.Controllers
 {
@@ -58,10 +58,8 @@ namespace INTEX_II_Group_4_3.Controllers
 
         public IActionResult Products()
         {
-            //var products = await _context.Products.ToListAsync();
-            ////return View(products);
-
-            return View();
+            var products = _repo.Products.ToListAsync();
+            return View(products);
         }
 
 
@@ -102,21 +100,29 @@ namespace INTEX_II_Group_4_3.Controllers
         [HttpGet]
         public IActionResult Checkout()
         {
-            //autofill name from Customer table
-            //ViewBag.first_name = _context.Customers.ToList();
-            //ViewBag.last_name = _context.Customers.ToList();
-            return View("Checkout");
+            return View(new Order());
         }
-
         // Post Checkout to database
         [HttpPost]
-        public IActionResult Order(Order response)
+        public IActionResult Create(Order o)
         {
-           // _context.Orders.Add(response);
-            //_context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                // Set the date to now
+                o.Date = DateOnly.FromDateTime(DateTime.Now);
 
-            return View("Confirmation", response);
+                // Get the abbreviated day of week, e.g., "Wed" for Wednesday
+                o.DayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(DateTime.Now.DayOfWeek);
+                o.Time = DateTime.Now.Hour;
+                o.CountryOfTransaction = "USA";
 
+                _repo.AddOrder(o);
+                return View("Confirmation");
+            }
+            else
+            {
+                return View(new Order());
+            }
         }
     }
 }

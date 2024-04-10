@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace INTEX_II_Group_4_3.Models;
 
-public partial class LegoInfoContext : IdentityDbContext<Customer>
+public partial class LegoInfoContext : IdentityDbContext
 {
     public LegoInfoContext()
     {

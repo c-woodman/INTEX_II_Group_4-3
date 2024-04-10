@@ -18,7 +18,7 @@ namespace INTEX_II_Group_4_3.Controllers
             _repo = temp;
         }
 
-        public IActionResult Shop(int pageNum)
+        public IActionResult Shop(int pageNum, string? productCategory)
         {
             int pageSize = 5;
             pageNum = Math.Max(pageNum, 1);
@@ -26,6 +26,7 @@ namespace INTEX_II_Group_4_3.Controllers
             var blah = new ProductsListViewModel
             {
                 Products = _repo.Products
+                .Where(x => x.Category == productCategory || productCategory == null)
                 .OrderBy(x => x.Name)
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize),
@@ -34,8 +35,10 @@ namespace INTEX_II_Group_4_3.Controllers
                 {
                     CurrentPage = pageNum,
                     ItemsPerPage = pageSize,
-                    TotalItems = _repo.Products.Count()
-                }
+                    TotalItems = productCategory == null ? _repo.Products.Count() : _repo.Products.Where(x => x.Category == productCategory).Count()
+                },
+
+                CurrentProductCategory = productCategory
             };
 
             return View(blah);

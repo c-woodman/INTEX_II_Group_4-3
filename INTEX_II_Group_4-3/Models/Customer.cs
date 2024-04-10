@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace INTEX_II_Group_4_3.Models;
 
-public partial class Customer: IdentityUser
+public partial class Customer
 {
-
+    [Key]
+    public int CustomerId { get; set; }
     public string FirstName { get; set; } = null!;
 
     public string LastName { get; set; } = null!;

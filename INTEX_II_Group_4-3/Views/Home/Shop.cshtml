@@ -2,11 +2,18 @@
     ViewData["Title"] = "Shop";
 }
 
-@model ProductsListViewModel
+<div class="row m-1 p-1">
+    <div class="col-3">
+        <vc:product-category />
+    </div>
+</div>
+
+<div class="col-9">
+    @model ProductsListViewModel
 
     <h1>Shopping List</h1>
-
-        @foreach (Product p in Model.Products)
+     
+    @foreach (Product p in Model.Products)
     {
         <h3>@p.Name</h3>
 
@@ -16,16 +23,5 @@
         </ul>
     }
 
-<div page-model="@Model.PaginationInfo" page-action="Shop"></div>
-
-@* <h1>
-    Explore <span class="nowrap"><span class="colorful letter">A</span><span class="colorful letter">u</span><span class="colorful letter">r</span><span class="colorful letter">o</span><span class="colorful letter">r</span><span class="colorful letter">a</span></span>’s Top Picks
-</h1>
-
-<br>
-<div class="pagination">
-    <a href="#" class="page active">1</a>
-    <a href="#" class="page">2</a>
-    <a href="#" class="page">3</a>
-    <a href="#" class="page">4</a>
-</div> *@
+    <div page-model="@Model.PaginationInfo" page-action="Shop" page-url-productCategory="@Model.CurrentProductCategory"></div>
+</div>

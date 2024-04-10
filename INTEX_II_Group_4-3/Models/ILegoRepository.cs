@@ -3,5 +3,7 @@
     public interface ILegoRepository
     {
         public IQueryable<Product> Products { get; }
+
+        void AddOrder(Order o);
     }
 }

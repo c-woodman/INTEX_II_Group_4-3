@@ -1,4 +1,3 @@
-using INTEX_II_Group_4_3.Data;
 using INTEX_II_Group_4_3.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<LegoInfoContext>();
 builder.Services.AddControllersWithViews();
 

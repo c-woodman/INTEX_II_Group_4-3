@@ -53,15 +53,11 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Products()
+        public IActionResult Products()
         {
             //var products = await _context.Products.ToListAsync();
             ////return View(products);
 
-            return View();
-        }
-        public IActionResult Checkout()
-        {
             return View();
         }
 
@@ -97,6 +93,27 @@ namespace INTEX_II_Group_4_3.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        // Render the Checkout View
+        [HttpGet]
+        public IActionResult Checkout()
+        {
+            //autofill name from Customer table
+            //ViewBag.first_name = _context.Customers.ToList();
+            //ViewBag.last_name = _context.Customers.ToList();
+            return View("Checkout");
+        }
+
+        // Post Checkout to database
+        [HttpPost]
+        public IActionResult Order(Order response)
+        {
+           // _context.Orders.Add(response);
+            //_context.SaveChanges();
+
+            return View("Confirmation", response);
+
         }
     }
 }

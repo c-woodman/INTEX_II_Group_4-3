@@ -16,11 +16,15 @@
     @foreach (Product p in Model.Products)
     {
         <h3>@p.Name</h3>
-
+            
         <ul>
             <li>Price: @p.Price</li>
             <li>Year: @p.Year</li>
         </ul>
+
+        <h3>
+            <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.ProductId" class="btn btn-secondary">Show Details</a>
+        </h3>
     }
 
     <div page-model="@Model.PaginationInfo" page-action="Shop" page-url-productCategory="@Model.CurrentProductCategory"></div>

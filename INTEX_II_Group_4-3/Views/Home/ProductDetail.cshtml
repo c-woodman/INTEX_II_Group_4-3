@@ -1,0 +1,32 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IQueryable<Product>
+
+<div>
+    @foreach (Product p in Model)
+    {
+        <h2>@p.Name</h2>
+        <div>
+            @if (!string.IsNullOrEmpty(p.ImgLink))
+            {
+                <img src="@p.ImgLink" alt="Image for @p.Name" style="max-width: 750px; height: auto;">
+            }
+            <p>Price: $@p.Price</p>
+            <p>Year: @p.Year</p>
+            <p>Number of Parts: @p.NumParts Parts</p>
+            <p>Description: <br />@p.Description</p>
+        </div>
+    }
+
+    <form method="post" asp-page="/Cart">
+        <button type="submit" class="btn btn-outline-success">Add to Cart</button>
+    </form>
+</div>
+
+
+
+

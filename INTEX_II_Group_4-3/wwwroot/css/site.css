@@ -12,6 +12,99 @@
     --green: #479B88;
 }
 
+.form-control {
+}
+
+    .form-control:focus {
+        border: 1px solid var(--Yellow);
+    }
+
+/* Center the container */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    background-color: var(--lightYellow);
+    padding: 0px;
+    border-radius: 20px;
+    width: 45%;
+    margin: 0 auto; /* Centers the container horizontally */
+}
+
+
+/* Style the form fields */
+.login-form input {
+    display: block; /* Makes the input block-level so it respects width and auto margins */
+    width: 400px; /* Specifies the width of the input */
+    padding: 10px;
+    margin: 0 auto 20px auto; /* Centers the element horizontally and keeps 20px margin at the bottom */
+    border: 0px solid #ccc;
+    border-radius: 100px;
+    font-size: 16px;
+}
+
+/* adjust checkbox margin */
+.form-check-input {
+    margin-top: 4px; 
+    margin-right: 5px;
+}
+
+.or-divider {
+    text-align: center;
+    position: relative;
+    margin: 20px 0;
+}
+
+    .or-divider span {
+        background-color: #fff; /* Adjust the background color as needed */
+        padding: 0 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .or-divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        border-top: 1px solid #000; /* Adjust the line color and thickness as needed */
+        z-index: 0;
+    }
+
+
+
+
+
+/* Style the Google sign-in button */
+.google-sign-in {
+    width: 300px;
+    padding: 10px;
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .google-sign-in img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+
+    /* Add hover effects */
+    .login-form button:hover,
+    .google-sign-in:hover {
+        opacity: 0.8;
+    }
+
 .shopping-cart {
     width: 80%;
     margin: 2em auto;
@@ -143,14 +236,11 @@ h3 {
 }
 
 a {
-    color: inherit; /* Makes the link's color the same as its parent */
-    text-decoration: none; /* Removes the underline from links */
-    background-color: transparent; /* Ensures there is no background color */
+    color: var(--green); /* Makes the link's color the same as its parent */
 }
 
     a, a:hover {
-        color: inherit; /* Keeps the link color the same on hover */
-        text-decoration: none; /* Optional: removes underline on hover as well */
+        color: #357C6C;
     }
 
 

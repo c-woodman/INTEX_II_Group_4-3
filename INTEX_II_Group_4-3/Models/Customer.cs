@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace INTEX_II_Group_4_3.Models;
 
-public partial class Customer
+public partial class Customer: IdentityUser
 {
-    public short CustomerId { get; set; }
 
     public string FirstName { get; set; } = null!;
 

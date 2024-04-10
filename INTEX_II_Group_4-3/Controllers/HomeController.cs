@@ -56,11 +56,11 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
-        public IActionResult Products()
-        {
-            var products = _repo.Products.ToListAsync();
-            return View(products);
-        }
+        //public IActionResult Products()
+        //{
+        //    var products = _repo.Products.ToListAsync();
+        //    return View(products);
+        //}
 
 
 

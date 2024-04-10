@@ -8,5 +8,12 @@ namespace INTEX_II_Group_4_3.Models
             _context = temp;
         }
         public IQueryable<Product> Products => _context.Products;
+
+        //add order through checkout
+        public void AddOrder(Order order)
+        {
+            _context.Add(order);
+            _context.SaveChanges();
+        }
     }
 }

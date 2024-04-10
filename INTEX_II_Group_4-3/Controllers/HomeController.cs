@@ -111,7 +111,6 @@ namespace INTEX_II_Group_4_3.Controllers
                 // Get the abbreviated day of week, e.g., "Wed" for Wednesday
                 o.DayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(DateTime.Now.DayOfWeek);
                 o.Time = DateTime.Now.Hour;
-                o.CountryOfTransaction = "USA";
 
                 _repo.AddOrder(o);
                 return View("Confirmation");

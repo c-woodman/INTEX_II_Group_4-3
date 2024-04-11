@@ -20,11 +20,12 @@
             <p>Number of Parts: @p.NumParts Parts</p>
             <p>Description: <br />@p.Description</p>
         </div>
-    }
 
-    <form method="post" asp-page="/Cart">
+        <form id=@p.ProductId method="post" asp-page="/Cart">
+        <input type="hidden" asp-for="@p.ProductId" />
         <button type="submit" class="btn btn-outline-success">Add to Cart</button>
     </form>
+    }
 </div>
 
 

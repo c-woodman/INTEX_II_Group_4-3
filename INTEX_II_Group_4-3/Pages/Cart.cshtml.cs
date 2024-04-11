@@ -19,10 +19,10 @@ namespace INTEX_II_Group_4_3.Pages
         {
             //Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
         }
-        public void OnPost(int productId)
+        public IActionResult OnPost(int Product_ID)
         {
             Product prod = _repo.Products
-                .FirstOrDefault(x =>  x.ProductId == productId);
+                .FirstOrDefault(x =>  x.ProductId == Product_ID);
 
             if (prod != null)
             {
@@ -30,6 +30,8 @@ namespace INTEX_II_Group_4_3.Pages
                 Cart.AddItem(prod, 1);
                 //HttpContext.Session.SetJson("cart", Cart);
             }
+
+            return RedirectToPage("/Cart");
         }
 
         public IActionResult OnPostRemove (int productId) 

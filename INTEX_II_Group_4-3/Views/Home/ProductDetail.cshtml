@@ -1,0 +1,70 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model ProductRecommendation
+<div class="container">
+
+<div>
+    <h2>@Model.ProductRec.Name</h2>
+    <div>
+        <div style="display: flex; align-items: center;">
+            @if (!string.IsNullOrEmpty(Model.ProductRec.ImgLink))
+            {
+                    <div style="flex: 1; max-height: 400px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                  
+                        <img src="@Model.ProductRec.ImgLink" alt="Image for @Model.ProductRec.Name" style="width: 400px; height: 400px; object-fit: contain;">
+                    
+                </div>
+            }
+                <div style="flex: 1; padding: 20px; margin-left: 20px">
+                    <h1 style="font-family: 'Baloo Thambi 2', sans-serif;">@Model.ProductRec.Name</h1>
+                    <br>
+                <h2 style="color: var(--black)">$@Model.ProductRec.Price</h2>
+                    <br>
+                <p>@Model.ProductRec.NumParts Parts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year: @Model.ProductRec.Year</p>
+                <br><br>
+                <form id=@Model.ProductRec.ProductId method="post" asp-page="/Cart">
+                    <input type="hidden" asp-for="Product_ID" value="@Model.ProductRec.ProductId">
+                    <button type="submit" class="button">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="desc">
+        <h3>Description</h3>
+        <p>@Model.ProductRec.Description</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <h2>Similar Products</h2>
+    <div>
+        <h1>@Model.Product_1.Name</h1>
+        <p>$@Model.Product_2.Price</p>
+    </div>
+    <div>
+        <h1>@Model.Product_2.Name</h1>
+        <p>$@Model.Product_2.Price</p>
+    </div>
+    <div>
+        <h1>@Model.Product_3.Name</h1>
+        <p>$@Model.Product_3.Price</p>
+    </div>
+    <div>
+        <h1>@Model.Product_4.Name</h1>
+        <p>$@Model.Product_4.Price</p>
+    </div>
+    <div>
+        <h1>@Model.Product_5.Name</h1>
+        <p>$@Model.Product_5.Price</p>
+    </div>
+
+</div>
+
+

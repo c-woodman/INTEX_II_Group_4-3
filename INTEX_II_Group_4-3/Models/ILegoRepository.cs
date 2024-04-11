@@ -4,6 +4,9 @@
     {
         public IQueryable<Product> Products { get; }
 
+        public IQueryable<ProductRecommendation> ProductRecommendations(int productId);
+        public IQueryable<TopProductRecommendation> TopProductRecommendations(int productId);
+
         void AddOrder(Order o);
     }
 }

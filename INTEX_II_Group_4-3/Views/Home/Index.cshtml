@@ -1,6 +1,12 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
+
 
 <div class="image-background">
     <div class="overlay-text">
@@ -18,7 +24,7 @@
     <div class="text-box">
         <p>Featured build</p>
         <h2>Product Name</h2>
-        <a href='#' class="ghostButton">View Details</a>
+        <a href='#' class="ghostButton" style="text-decoration: none; color: #FFBF00;">View Details</a>
     </div>
 </div>
 
@@ -51,9 +57,11 @@
     <br><br>
     
     <div style="text-align: center;">
-        <a href="/Home/Shop" class="button">Explore</a>
+        <a href="/Home/Shop" class="button" style="text-decoration: none; color: #7A6200;">Explore</a>
     </div>
 
     <br><br>
 </div>
+
+
 

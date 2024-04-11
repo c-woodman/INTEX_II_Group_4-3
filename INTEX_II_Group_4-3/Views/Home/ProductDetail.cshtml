@@ -5,24 +5,40 @@
 }
 
 @model Product
+<div class="container">
 
 <div>
-    <h2>@Model.Name</h2>
     <div>
-        @if (!string.IsNullOrEmpty(Model.ImgLink))
-        {
-            <img src="@Model.ImgLink" alt="Image for @Model.Name" style="max-width: 750px; height: auto;">
-        }
-        <p>Price: $@Model.Price</p>
-        <p>Year: @Model.Year</p>
-        <p>Number of Parts: @Model.NumParts Parts</p>
-        <p>Description: <br />@Model.Description</p>
-    </div>
+        <div style="display: flex; align-items: center;">
+            @if (!string.IsNullOrEmpty(Model.ImgLink))
+            {
+                    <div style="flex: 1; max-height: 400px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                  
+                        <img src="@Model.ImgLink" alt="Image for @Model.Name" style="width: 400px; height: 400px; object-fit: contain;">
+                    
+                </div>
+            }
+                <div style="flex: 1; padding: 20px; margin-left: 20px">
+                    <h1 style="font-family: 'Baloo Thambi 2', sans-serif;">@Model.Name</h1>
+                    <br>
+                <h2 style="color: var(--black)">$@Model.Price</h2>
+                    <br>
+                <p>@Model.NumParts Parts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year: @Model.Year</p>
+                <br><br>
+                <form id=@Model.ProductId method="post" asp-page="/Cart">
+                    <input type="hidden" asp-for="ProductId" />
+                    <button type="submit" class="button">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="desc">
+        <h3>Description</h3>
+        <p>@Model.Description</p>
+            </div>
+        </div>
 
-    <form id=@Model.ProductId method="post" asp-page="/Cart">
-        <input type="hidden" asp-for="ProductId" />
-        <button type="submit" class="btn btn-outline-success">Add to Cart</button>
-    </form>
+    </div>
 </div>
 
 

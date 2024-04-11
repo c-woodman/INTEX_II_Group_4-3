@@ -12,6 +12,72 @@
     --green: #479B88;
 }
 
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Creates 4 columns */
+    gap: 20px; /* Adjusts the gap between grid items */
+}
+
+.product-item {
+    /* Styles for individual product items */
+    /* Add any box shadow, padding, or margins as you prefer */
+}
+
+
+.desc {
+    padding-top: 30px;
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+.container {
+    padding: 60px;
+}
+
+/* Style the container for each product */
+.product-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Style for the product name */
+h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Style for the product image */
+.product-image {
+    max-width: 750px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* Style for product details */
+.product-details {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Style for the price, specially highlighting it */
+.product-price {
+    color: #000;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Style for the description text */
+.product-description {
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
 .form-control {
 }
 

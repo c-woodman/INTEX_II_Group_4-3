@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace INTEX_II_Group_4_3.Models;
 
-public partial class LegoInfoContext : IdentityDbContext
+public partial class LegoInfoContext : IdentityDbContext<Customer>
 {
     public LegoInfoContext()
     {
@@ -118,6 +118,10 @@ public partial class LegoInfoContext : IdentityDbContext
                 .HasColumnName("secondary_color");
             entity.Property(e => e.Year).HasColumnName("year");
         });
+
+        //modelBuilder.Entity<IdentityRole>
+
+
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

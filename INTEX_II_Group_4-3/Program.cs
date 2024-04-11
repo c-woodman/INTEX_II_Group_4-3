@@ -17,15 +17,15 @@ public class Program
 
         builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
 
-builder.Services.AddRazorPages();
+        builder.Services.AddRazorPages();
 
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession();
+        builder.Services.AddDistributedMemoryCache();
+        builder.Services.AddSession();
 
-builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddRoles<IdentityRole>()
@@ -37,7 +37,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //  new InferenceSession("C:\\Users\\malea\\source\\repos\\INTEX_II_Group_4-3\\INTEX_II_Group_4-3\\FraudDetection.onnx")
 //);
 
-var app = builder.Build();
+        var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -54,11 +54,33 @@ var app = builder.Build();
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
-app.UseSession();
+        app.UseSession();
 
-app.UseRouting();
+        app.UseRouting();
 
         app.UseAuthorization();
+
+        app.Use(async (context, next) =>
+        {
+            context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+            context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+            context.Response.Headers.Add("Referrer-Policy", "no-referrer");
+
+            // Define your Content-Security-Policy
+            string csp = "default-src 'self'; " +
+                         "script-src 'self' 'unsafe-inline'; " +
+                         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " + // For Google Fonts
+                         "img-src 'self' data: https://m.media-amazon.com https://www.lego.com https://images.brickset.com https://www.brickeconomy.com; " + // Domains for images
+                         "font-src 'self' https://fonts.gstatic.com;"; // For Google Fonts
+
+            // Add Content-Security-Policy without overwriting existing headers
+            if (!context.Response.Headers.ContainsKey("Content-Security-Policy"))
+            {
+                context.Response.Headers.Add("Content-Security-Policy", csp);
+            }
+
+            await next();
+        });
 
         app.MapControllerRoute(
             name: "default",

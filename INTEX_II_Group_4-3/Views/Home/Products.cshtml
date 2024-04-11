@@ -1,5 +1,7 @@
-﻿@model IEnumerable<INTEX_II_Group_4_3.Models.Product>
+﻿
 
+<div class = "container">
+    <a class="btn btn-info btn-sm" asp-controller="Home" asp-action="CreateProduct">Add Product</a>
 <table>
     <thead>
         <tr>
@@ -13,6 +15,8 @@
             <th>Secondary Color</th>
             <th>Description</th>
             <th>Category</th>
+                <th>Edit</th>
+                <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -32,9 +36,13 @@
                 </td>
                 <td>@product.PrimaryColor</td>
                 <td>@product.SecondaryColor</td>
-                <td>@product.Description</td>
+                    <td>@(product.Description.Length > 100 ? product.Description.Substring(0, 100) + "..." : product.Description)</td>
+
                 <td>@product.Category</td>
+                <td><a class="btn btn-info btn-sm" asp-controller="Home" asp-action="Edit" asp-route-id="@product.ProductId">✎</a></td>
+                <td><a class="btn btn-danger btn-sm" asp-controller="Home" asp-action="Delete" asp-route-id="@product.ProductId">🗑</a></td>
             </tr>
         }
     </tbody>
 </table>
+</div>

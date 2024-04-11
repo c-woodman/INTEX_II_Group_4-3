@@ -86,16 +86,15 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
-        //public IActionResult Products()
-        //{
-        //    var products = _repo.Products.ToListAsync();
-        //    return View(products);
-        //}
-        public IActionResult Products()
+        public async Task<IActionResult> Products()
         {
-            var products = _repo.Products.ToListAsync();
+            // Await the asynchronous operation and obtain the result.
+            var products = await _repo.Products.ToListAsync();
+
+            // Pass the result to the view.
             return View(products);
         }
+
         // Whatever the name of the individual product view is should be put here 
         //public IActionResult ProductDetails(int productID)
         //{
@@ -107,6 +106,7 @@ namespace INTEX_II_Group_4_3.Controllers
         {
             return View();
         }
+
         public IActionResult About()
         {
             return View();
@@ -162,5 +162,74 @@ namespace INTEX_II_Group_4_3.Controllers
                 return View(new Order());
             }
         }
+
+        //Add product
+        [HttpGet]
+        public IActionResult CreateProduct()
+        {
+            return View(new Product());
+        }
+        [HttpPost]
+        public IActionResult CreateProduct(Product t)
+        {
+            if (ModelState.IsValid)
+            {
+                _repo.AddProduct(t);
+                return RedirectToAction("Products");
+            }
+            else
+            {
+                return View(new Product());
+            }
+        }
+
+        //Edit product
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var recordToEdit = _repo.GetProductById(id);
+            if (recordToEdit == null)
+            {
+                return NotFound();
+            }
+
+            return View("CreateProduct", recordToEdit);
+
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Product updatedProduct)
+        {
+            _repo.UpdateProduct(updatedProduct); //Good
+            return RedirectToAction("Products");
+        }
+
+        //product delete
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var recordToDelete = _repo.GetProductById(id);
+            if (recordToDelete == null)
+            {
+                return NotFound();
+            }
+            return View("DeleteConfirmation", recordToDelete); // Pass the record to a new confirmation view
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id) // Renamed to avoid confusion with HttpGet Delete
+        {
+            var recordToDelete = _repo.GetProductById(id);
+            if (recordToDelete != null)
+            {
+                _repo.RemoveProduct(recordToDelete);
+                return RedirectToAction("Products");
+            }
+            return NotFound();
+        }
+
+
+
+
     }
 }

@@ -11,120 +11,120 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-    var services = builder.Services;
+        var services = builder.Services;
 
-    var configuration = builder.Configuration;
+        var configuration = builder.Configuration;
 
-    var googleClientId = builder.Configuration["GoogleClientId"];
-    var googleClientSecret = builder.Configuration["GoogleClientSecret"];
+        var googleClientId = builder.Configuration["GoogleClientId"];
+        var googleClientSecret = builder.Configuration["GoogleClientSecret"];
 
-    Console.WriteLine($"Google Client ID: {googleClientId}");
-    Console.WriteLine($"Google Client Secret: {googleClientSecret}");
+        Console.WriteLine($"Google Client ID: {googleClientId}");
+        Console.WriteLine($"Google Client Secret: {googleClientSecret}");
 
 
 
-    builder.Services.AddAuthentication()
-        .AddGoogle(options =>
-        {
-            options.ClientId = googleClientId;
-            options.ClientSecret = googleClientSecret;
+        builder.Services.AddAuthentication()
+            .AddGoogle(options =>
+            {
+                options.ClientId = googleClientId;
+                options.ClientSecret = googleClientSecret;
 
-        });
+            });
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<LegoInfoContext>(options =>
-    options.UseSqlServer(connectionString));
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    builder.Services.AddDbContext<LegoInfoContext>(options =>
+        options.UseSqlServer(connectionString));
 
-        builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
+            builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
 
-        builder.Services.AddRazorPages();
+            builder.Services.AddRazorPages();
 
-        builder.Services.AddDistributedMemoryCache();
-        builder.Services.AddSession();
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();
 
-        builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
-        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<LegoInfoContext>();
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<LegoInfoContext>();
 
-        builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews();
 
-//builder.Services.AddSingleton<InferenceSession>(
-//  new InferenceSession("C:\\Users\\malea\\source\\repos\\INTEX_II_Group_4-3\\INTEX_II_Group_4-3\\FraudDetection.onnx")
-//);
+    //builder.Services.AddSingleton<InferenceSession>(
+    //  new InferenceSession("C:\\Users\\malea\\source\\repos\\INTEX_II_Group_4-3\\INTEX_II_Group_4-3\\FraudDetection.onnx")
+    //);
 
-        var app = builder.Build();
+            var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseMigrationsEndPoint();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
-        }
-
-        app.UseHttpsRedirection();
-        app.UseStaticFiles();
-
-        app.UseSession();
-
-        app.UseRouting();
-
-        app.UseAuthorization();
-
-        app.Use(async (context, next) =>
-        {
-            context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-            context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
-            context.Response.Headers.Add("Referrer-Policy", "no-referrer");
-
-            // Define your Content-Security-Policy
-            string csp = "default-src 'self'; " +
-                         "script-src 'self' 'unsafe-inline'; " +
-                         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " + // For Google Fonts
-                         "img-src 'self' data: https://m.media-amazon.com https://www.lego.com https://images.brickset.com https://www.brickeconomy.com; " + // Domains for images
-                         "font-src 'self' https://fonts.gstatic.com;"; // For Google Fonts
-
-            // Add Content-Security-Policy without overwriting existing headers
-            if (!context.Response.Headers.ContainsKey("Content-Security-Policy"))
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
             {
-                context.Response.Headers.Add("Content-Security-Policy", csp);
+                app.UseMigrationsEndPoint();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
 
-            await next();
-        });
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-        app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
-        app.MapRazorPages();
+            app.UseSession();
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            app.UseRouting();
 
-            var roles = new[] { "Admin", "Customer" };
+            app.UseAuthorization();
 
-            foreach (var role in roles)
+            app.Use(async (context, next) =>
             {
-                if (!await roleManager.RoleExistsAsync(role))
-                    await roleManager.CreateAsync(new IdentityRole(role));
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                context.Response.Headers.Add("Referrer-Policy", "no-referrer");
+
+                // Define your Content-Security-Policy
+                string csp = "default-src 'self'; " +
+                             "script-src 'self' 'unsafe-inline'; " +
+                             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " + // For Google Fonts
+                             "img-src 'self' data: https://m.media-amazon.com https://www.lego.com https://images.brickset.com https://www.brickeconomy.com; " + // Domains for images
+                             "font-src 'self' https://fonts.gstatic.com;"; // For Google Fonts
+
+                // Add Content-Security-Policy without overwriting existing headers
+                if (!context.Response.Headers.ContainsKey("Content-Security-Policy"))
+                {
+                    context.Response.Headers.Add("Content-Security-Policy", csp);
+                }
+
+                await next();
+            });
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapRazorPages();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                var roles = new[] { "Admin", "Customer" };
+
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                }
+
             }
 
-        }
-
-        using (var scope = app.Services.CreateScope())
-        {
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
             //string email = "aurorabrickwell@masterbuilder.com";
             //string password = "123Intex!";

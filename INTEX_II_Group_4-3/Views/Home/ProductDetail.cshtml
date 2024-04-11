@@ -42,29 +42,61 @@
     </div>
 </div>
 
-<div>
-    <h2>Similar Products</h2>
-    <div>
-        <h1>@Model.Product_1.Name</h1>
-        <p>$@Model.Product_2.Price</p>
-    </div>
-    <div>
-        <h1>@Model.Product_2.Name</h1>
-        <p>$@Model.Product_2.Price</p>
-    </div>
-    <div>
-        <h1>@Model.Product_3.Name</h1>
-        <p>$@Model.Product_3.Price</p>
-    </div>
-    <div>
-        <h1>@Model.Product_4.Name</h1>
-        <p>$@Model.Product_4.Price</p>
-    </div>
-    <div>
-        <h1>@Model.Product_5.Name</h1>
-        <p>$@Model.Product_5.Price</p>
-    </div>
+<div class="container">
+<h3>Similar Products</h3>
+<div class="products-grid">
+        <div class="product-item" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = @Model.Product_1.ProductId })'" style="cursor: pointer;">
+            <!-- Grid item -->
+            @if (!string.IsNullOrEmpty(@Model.Product_1.Name))
+            {
+                <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                    <img src="@Model.Product_1.ImgLink" alt="Image for @Model.Product_1.Name" style="width: 200px; height: 200px; object-fit: contain;">
+                </div>
+            }
+            <p style="font-weight: bold;">@Model.Product_1.Name</p>
+            <p>$@Model.Product_1.Price</p>
+            
+        </div>
 
+
+        <div class="product-item" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = @Model.Product_2.ProductId })'" style="cursor: pointer;">
+            <!-- Grid item -->
+            @if (!string.IsNullOrEmpty(@Model.Product_2.Name))
+            {
+                <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                    <img src="@Model.Product_2.ImgLink" alt="Image for @Model.Product_2.Name" style="width: 200px; height: 200px; object-fit: contain;">
+                </div>
+            }
+            <p style="font-weight: bold;">@Model.Product_2.Name</p>
+            <p>$@Model.Product_2.Price</p>
+            
+        </div>
+
+        <div class="product-item" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = @Model.Product_3.ProductId })'" style="cursor: pointer;">
+            <!-- Grid item -->
+            @if (!string.IsNullOrEmpty(@Model.Product_3.Name))
+            {
+                <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                    <img src="@Model.Product_3.ImgLink" alt="Image for @Model.Product_3.Name" style="width: 200px; height: 200px; object-fit: contain;">
+                </div>
+            }
+            <p style="font-weight: bold;">@Model.Product_3.Name</p>
+            <p>$@Model.Product_3.Price</p>
+
+        </div>
+
+
+        <div class="product-item" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = @Model.Product_4.ProductId })'" style="cursor: pointer;">
+            <!-- Grid item -->
+            @if (!string.IsNullOrEmpty(@Model.Product_4.Name))
+            {
+                <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                    <img src="@Model.Product_4.ImgLink" alt="Image for @Model.Product_4.Name" style="width: 200px; height: 200px; object-fit: contain;">
+                </div>
+            }
+            <p style="font-weight: bold;">@Model.Product_4.Name</p>
+            <p>$@Model.Product_4.Price</p>
+        </div>
 </div>
-
+</div>
 

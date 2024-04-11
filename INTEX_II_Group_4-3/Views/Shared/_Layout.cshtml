@@ -43,7 +43,7 @@
         </nav>
 
 
-        @if (!User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm" style="background-color: #FFFBEC;">
                 <div class="container-fluid">

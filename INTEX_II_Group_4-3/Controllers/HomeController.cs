@@ -19,9 +19,9 @@ namespace INTEX_II_Group_4_3.Controllers
 {
     public class HomeController : Controller
     {
-        private ILegoRepository _repo;
-        private InferenceSession _session;
-        private ILogger<HomeController> _logger;
+        private readonly ILegoRepository _repo;
+        private readonly InferenceSession _session;
+        private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILegoRepository temp, ILogger<HomeController> logger)
         {

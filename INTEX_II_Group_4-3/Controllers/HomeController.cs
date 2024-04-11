@@ -44,10 +44,10 @@ namespace INTEX_II_Group_4_3.Controllers
             return View(blah);
         }
 
-        public IActionResult ProductDetail(int id)
+        public async Task<IActionResult> ProductDetail(int id)
         {
-            var productData = _repo.Products
-                .Where(x => x.ProductId == id);
+            var productData = await _repo.Products
+                .FirstOrDefaultAsync(p => p.ProductId == id);
 
             return View(productData);
         }

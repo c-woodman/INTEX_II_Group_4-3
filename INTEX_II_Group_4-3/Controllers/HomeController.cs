@@ -63,6 +63,14 @@ namespace INTEX_II_Group_4_3.Controllers
             return View(blah);
         }
 
+        public async Task<IActionResult> ProductDetail(int id)
+        {
+            var productData = await _repo.Products
+                .FirstOrDefaultAsync(p => p.ProductId == id);
+
+            return View(productData);
+        }
+
         //private readonly ILogger<HomeController> _logger;
         //public HomeController(ILogger<HomeController> logger, LegoInfoContext context)
         //{
@@ -80,8 +88,6 @@ namespace INTEX_II_Group_4_3.Controllers
         //    var products = _repo.Products.ToListAsync();
         //    return View(products);
         //}
-
-
 
         public IActionResult Cart()
         {

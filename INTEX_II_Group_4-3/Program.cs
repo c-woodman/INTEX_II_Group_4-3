@@ -1,6 +1,8 @@
 using INTEX_II_Group_4_3.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
 
 public class Program
 {
@@ -15,7 +17,12 @@ public class Program
 
         builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
 
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddRazorPages();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddRoles<IdentityRole>()
@@ -23,7 +30,11 @@ public class Program
 
         builder.Services.AddControllersWithViews();
 
-        var app = builder.Build();
+//builder.Services.AddSingleton<InferenceSession>(
+//  new InferenceSession("C:\\Users\\malea\\source\\repos\\INTEX_II_Group_4-3\\INTEX_II_Group_4-3\\FraudDetection.onnx")
+//);
+
+var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -40,7 +51,9 @@ public class Program
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
-        app.UseRouting();
+app.UseSession();
+
+app.UseRouting();
 
         app.UseAuthorization();
 

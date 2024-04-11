@@ -178,44 +178,44 @@
     display: flex;
 }
 
-.page {
-    text-decoration: none;
-    color: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 45px;
-    margin: -1px;
-    background-color: white;
-    border: 1px solid black;
-    position: relative;
-}
-
-    .page:before {
-        content: '';
-        width: 19px;
-        height: 10px;
-        background-color: white;
-        border-top: 1px solid black;
-        border-left: 1px solid black;
-        border-right: 1px solid black;
-        position: absolute;
-        top: -5px;
-        left: 10px;
-        transform: translateY(-40%);
-        z-index: -1;
-    }
-
-    .page.active, .page:hover {
-        background-color: #FFF4C9;
+    .pagination .page {
+        text-decoration: none;
         color: #000;
-        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 45px;
+        margin: -1px;
+        background-color: white;
+        border: 1px solid black;
+        position: relative;
     }
 
-        .page.active:before, .page:hover:before {
-            background-color: #FFF4C9;
+        .pagination .page:before {
+            content: '';
+            width: 19px;
+            height: 10px;
+            background-color: white;
+            border-top: 1px solid black;
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+            position: absolute;
+            top: -5px;
+            left: 10px;
+            transform: translateY(-40%);
+            z-index: -1;
         }
+
+        .pagination .page.active, .pagination .page:hover {
+            background-color: #FFE26F;
+            color: #000;
+            font-weight: bold;
+        }
+
+            .pagination .page.active:before, .pagination .page:hover:before {
+                background-color: #FFE26F;
+            }
 
 h1 {
     color: var(--black);

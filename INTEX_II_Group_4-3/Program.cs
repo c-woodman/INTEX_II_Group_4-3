@@ -105,32 +105,6 @@ public class Program
         {
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            //string email = "aurorabrickwell@masterbuilder.com";
-            //string password = "123Intex!";
-
-            //if (await userManager.FindByEmailAsync(email) == null)
-            //{
-            //    var user = new IdentityUser();
-            //    user.UserName = email;
-            //    user.Email = email;
-
-
-            //    await userManager.CreateAsync(user, password);
-
-            //    await userManager.AddToRoleAsync(user, "Admin");
-            //}
-
-            //if (await userManager.FindByEmailAsync(email) == null)
-            //{
-            //    var user = new IdentityUser();
-            //    user.UserName = email;
-            //    user.Email = email;
-
-            //    await userManager.CreateAsync(user, password);
-
-            //    await userManager.AddToRoleAsync(user, "Customer"); // Assign "Customer" role
-            //}
-
         }
 
         app.Run();

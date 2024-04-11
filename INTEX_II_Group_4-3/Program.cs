@@ -11,25 +11,25 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-var services = builder.Services;
+    var services = builder.Services;
 
-var configuration = builder.Configuration;
+    var configuration = builder.Configuration;
 
-var googleClientId = builder.Configuration["GoogleClientId"];
-var googleClientSecret = builder.Configuration["GoogleClientSecret"];
+    var googleClientId = builder.Configuration["GoogleClientId"];
+    var googleClientSecret = builder.Configuration["GoogleClientSecret"];
 
-Console.WriteLine($"Google Client ID: {googleClientId}");
-Console.WriteLine($"Google Client Secret: {googleClientSecret}");
+    Console.WriteLine($"Google Client ID: {googleClientId}");
+    Console.WriteLine($"Google Client Secret: {googleClientSecret}");
 
 
 
-builder.Services.AddAuthentication()
-    .AddGoogle(options =>
-    {
-        options.ClientId = googleClientId;
-        options.ClientSecret = googleClientSecret;
+    builder.Services.AddAuthentication()
+        .AddGoogle(options =>
+        {
+            options.ClientId = googleClientId;
+            options.ClientSecret = googleClientSecret;
 
-    });
+        });
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

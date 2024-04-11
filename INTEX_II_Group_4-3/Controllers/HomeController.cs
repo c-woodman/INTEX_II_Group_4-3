@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace INTEX_II_Group_4_3.Controllers
 {
@@ -37,6 +38,7 @@ namespace INTEX_II_Group_4_3.Controllers
             }
         }
 
+        
         public IActionResult Shop(int pageNum, string? productCategory)
         {
             int pageSize = 5;

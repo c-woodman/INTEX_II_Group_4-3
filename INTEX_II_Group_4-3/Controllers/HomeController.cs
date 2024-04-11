@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using INTEX_II_Group_4_3.Models.ViewModels;
+using System.Linq;
 
 namespace INTEX_II_Group_4_3.Controllers
 {
@@ -61,8 +62,12 @@ namespace INTEX_II_Group_4_3.Controllers
             var products = _repo.Products.ToListAsync();
             return View(products);
         }
-
-
+        // Whatever the name of the individual product view is should be put here 
+        public IActionResult ProductDetails(int productID)
+        {
+            var recommendations = _repo.ProductRecommendations(productID).FirstOrDefault();
+            return View(recommendations);
+        }
 
         public IActionResult Cart()
         {

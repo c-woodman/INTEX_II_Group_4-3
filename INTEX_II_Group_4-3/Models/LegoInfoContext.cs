@@ -24,6 +24,7 @@ public partial class LegoInfoContext : IdentityDbContext
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<ProductRecommendation> ProductRecommendations { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=tcp:myfreesqldbserverintex3.database.windows.net,1433;Initial Catalog=LegoInfo;Persist Security Info=False;User ID=IntexGroup4-3;Password=Intex1212!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");

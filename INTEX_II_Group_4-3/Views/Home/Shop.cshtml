@@ -22,6 +22,10 @@
             <li>Year: @p.Year</li>
         </ul>
     }
-
-    <div page-model="@Model.PaginationInfo" page-action="Shop" page-url-productCategory="@Model.CurrentProductCategory"></div>
+    <div class="pagination">
+        @for (int i = 1; i <= Model.PaginationInfo.TotalNumPages; i++)
+        {
+            <a href="@Url.Action("Shop", new { pageNum = i, productCategory = Model.CurrentProductCategory })" class="page @(Model.PaginationInfo.CurrentPage == i ? "active" : "")">@i</a>
+        }
+    </div>
 </div>

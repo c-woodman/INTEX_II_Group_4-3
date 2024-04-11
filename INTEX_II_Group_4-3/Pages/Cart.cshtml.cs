@@ -9,14 +9,15 @@ namespace INTEX_II_Group_4_3.Pages
     public class CartModel : PageModel
     {
         private ILegoRepository _repo;
-        public CartModel(ILegoRepository temp) 
+        public Cart Cart { get; set; }
+        public CartModel(ILegoRepository temp, Cart cartService) 
         {
             _repo = temp;
+            Cart = cartService;
         }
-        public Cart? Cart { get; set; }
         public void OnGet()
         {
-            Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
+            //Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
         }
         public void OnPost(int productId)
         {
@@ -25,10 +26,17 @@ namespace INTEX_II_Group_4_3.Pages
 
             if (prod != null)
             {
-                Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
+                //Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
                 Cart.AddItem(prod, 1);
-                HttpContext.Session.SetJson("cart", Cart);
+                //HttpContext.Session.SetJson("cart", Cart);
             }
+        }
+
+        public IActionResult OnPostRemove (int productId) 
+        {
+            Cart.RemoveLine(Cart.Lines.First(x => x.Product.ProductId == productId).Product);
+
+            return RedirectToPage(Cart);
         }
     }
 }

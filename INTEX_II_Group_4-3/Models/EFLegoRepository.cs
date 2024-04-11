@@ -26,7 +26,8 @@ namespace INTEX_II_Group_4_3.Models
                                                                                 .Include(x => x.Product_2)
                                                                                 .Include(x => x.Product_3)
                                                                                 .Include(x => x.Product_4)
-                                                                                .Include(x => x.Product_5);
+                                                                                .Include(x => x.Product_5)
+                                                                                .Include(x => x.ProductRec);
 
     }
 }

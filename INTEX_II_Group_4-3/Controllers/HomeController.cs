@@ -66,8 +66,8 @@ namespace INTEX_II_Group_4_3.Controllers
 
         public async Task<IActionResult> ProductDetail(int id)
         {
-            var productData = await _repo.Products
-                .FirstOrDefaultAsync(p => p.ProductId == id);
+            var productData = await _repo.ProductRecommendations(id)
+                .FirstOrDefaultAsync(p => p.Product_ID == id);
 
             return View(productData);
         }
@@ -95,11 +95,11 @@ namespace INTEX_II_Group_4_3.Controllers
             return View(products);
         }
         // Whatever the name of the individual product view is should be put here 
-        public IActionResult ProductDetails(int productID)
-        {
-            var recommendations = _repo.ProductRecommendations(productID).FirstOrDefault();
-            return View(recommendations);
-        }
+        //public IActionResult ProductDetails(int productID)
+        //{
+        //    var recommendations = _repo.ProductRecommendations(productID).FirstOrDefault();
+        //    return View(recommendations);
+        //}
 
         public IActionResult Cart()
         {

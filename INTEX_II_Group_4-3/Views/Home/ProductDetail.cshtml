@@ -4,27 +4,50 @@
 @{
 }
 
-@model Product
+@model ProductRecommendation
 
 <div>
-    <h2>@Model.Name</h2>
+    <h2>@Model.ProductRec.Name</h2>
     <div>
-        @if (!string.IsNullOrEmpty(Model.ImgLink))
+        @if (!string.IsNullOrEmpty(Model.ProductRec.ImgLink))
         {
-            <img src="@Model.ImgLink" alt="Image for @Model.Name" style="max-width: 750px; height: auto;">
+            <img src="@Model.ProductRec.ImgLink" alt="Image for @Model.ProductRec.Name" style="max-width: 750px; height: auto;">
         }
-        <p>Price: $@Model.Price</p>
-        <p>Year: @Model.Year</p>
-        <p>Number of Parts: @Model.NumParts Parts</p>
-        <p>Description: <br />@Model.Description</p>
+        <p>Price: $@Model.ProductRec.Price</p>
+        <p>Year: @Model.ProductRec.Year</p>
+        <p>Number of Parts: @Model.ProductRec.NumParts Parts</p>
+        <p>Description: <br />@Model.ProductRec.Description</p>
     </div>
 
-    <form id=@Model.ProductId method="post" asp-page="/Cart">
-        <input type="hidden" asp-for="ProductId" />
+    <form id=@Model.ProductRec.ProductId method="post" asp-page="/Cart">
+        <input type="hidden" asp-for="ProductRec.ProductId" />
         <button type="submit" class="btn btn-outline-success">Add to Cart</button>
     </form>
 </div>
 
+<div>
+    <h2>Similar Products</h2>
+    <div>
+        <h1>@Model.Product_1.Name</h1>
+        <p>$@Model.Product_2.Price</p>
+    </div>
+    <div>
+        <h1>@Model.Product_2.Name</h1>
+        <p>$@Model.Product_2.Price</p>
+    </div>
+    <div>
+        <h1>@Model.Product_3.Name</h1>
+        <p>$@Model.Product_3.Price</p>
+    </div>
+    <div>
+        <h1>@Model.Product_4.Name</h1>
+        <p>$@Model.Product_4.Price</p>
+    </div>
+    <div>
+        <h1>@Model.Product_5.Name</h1>
+        <p>$@Model.Product_5.Price</p>
+    </div>
 
+</div>
 
 

@@ -26,6 +26,10 @@
             <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.ProductId" class="btn btn-secondary">Show Details</a>
         </h3>
     }
-
-    <div page-model="@Model.PaginationInfo" page-action="Shop" page-url-productCategory="@Model.CurrentProductCategory"></div>
+    <div class="pagination">
+        @for (int i = 1; i <= Model.PaginationInfo.TotalNumPages; i++)
+        {
+            <a href="@Url.Action("Shop", new { pageNum = i, productCategory = Model.CurrentProductCategory })" class="page @(Model.PaginationInfo.CurrentPage == i ? "active" : "")">@i</a>
+        }
+    </div>
 </div>

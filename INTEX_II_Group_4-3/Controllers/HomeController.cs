@@ -6,16 +6,35 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using INTEX_II_Group_4_3.Models.ViewModels;
+using Microsoft.ML.OnnxRuntime;
+using Elfie.Serialization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.ML.OnnxRuntime.Tensors;
+using System;
 
 namespace INTEX_II_Group_4_3.Controllers
 {
     public class HomeController : Controller
     {
         private ILegoRepository _repo;
+        private InferenceSession _session;
+        private ILogger<HomeController> _logger;
 
-        public HomeController(ILegoRepository temp)
+        public HomeController(ILegoRepository temp, ILogger<HomeController> logger)
         {
             _repo = temp;
+            _logger = logger;
+
+            try
+            {
+                _session = new InferenceSession(@"C:\Path\To\Your\FraudDetection.onnx");
+                _logger.LogInformation("ONNX loaded successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to load ONNX model: {ex.Message}");
+            }
         }
 
         public IActionResult Shop(int pageNum, string? productCategory)
@@ -64,11 +83,11 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
-        public IActionResult Products()
-        {
-            var products = _repo.Products.ToListAsync();
-            return View(products);
-        }
+        //public IActionResult Products()
+        //{
+        //    var products = _repo.Products.ToListAsync();
+        //    return View(products);
+        //}
 
         public IActionResult Cart()
         {
@@ -120,7 +139,6 @@ namespace INTEX_II_Group_4_3.Controllers
                 // Get the abbreviated day of week, e.g., "Wed" for Wednesday
                 o.DayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(DateTime.Now.DayOfWeek);
                 o.Time = DateTime.Now.Hour;
-                o.CountryOfTransaction = "USA";
 
                 _repo.AddOrder(o);
                 return View("Confirmation");

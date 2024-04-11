@@ -81,10 +81,22 @@ namespace INTEX_II_Group_4_3.Controllers
         //    _context = context;
         //}
 
-        public IActionResult Index()
+        //public IActionResult Index(int productID)
+        //{
+        //    var recommendations = _repo.TopProductRecommendations(productID).FirstOrDefault(p => p.product_ID ==productID);
+        //    return View(recommendations);
+        //}
+
+        public async Task<IActionResult> Index(int productID)
         {
-            return View();
+            var recommendations = await _repo.TopProductRecommendations(productID)
+                .FirstOrDefaultAsync(p => p.product_ID == productID);
+                //.ToList() // Convert to a list
+
+            return View(recommendations);
         }
+
+
 
         //public IActionResult Products()
         //{

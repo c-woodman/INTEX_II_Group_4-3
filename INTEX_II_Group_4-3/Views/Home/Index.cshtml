@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+@model List<TopProductRecommendation>
 
 <div class="image-background">
     <div class="overlay-text">
@@ -30,7 +30,7 @@
 
 <br><br>
 <div class="container">
-    <h3>Recommended</h3>
+@*     <h3>Recommended</h3>
     <br><br>
     <div class="product-row">
         <div class="product-card">
@@ -53,6 +53,18 @@
             <p>Product Title 4</p>
         <p style="font-weight: bold;">$49.99</p>
         </div>
+    </div> *@
+    <h3>Recommended</h3>
+    <br><br>
+    <div class="product-row">
+        @foreach (var product in Model)
+        {
+            <div class="product-card">
+                <img src="@product.ProductRec.ImgLink" alt="@product.ProductRec.Name">
+                <p>@product.ProductRec.Name</p>
+                <p style="font-weight: bold;">$@product.ProductRec.Price.ToString("0.00")</p>
+            </div>
+        }
     </div>
     <br><br>
     

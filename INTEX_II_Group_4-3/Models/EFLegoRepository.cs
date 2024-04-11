@@ -37,5 +37,6 @@ namespace INTEX_II_Group_4_3.Models
                                                                         //.Include(x => x.Product_4)
                                                                         //.Include(x => x.Product_5)
                                                                         .Include(x => x.ProductRec);
+
     }
 }

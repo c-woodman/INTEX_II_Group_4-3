@@ -7,6 +7,7 @@
     ViewData["Title"] = "Shop";
 }
 
+<span class="nowrap h3">Explore <span class="colorful letter">A</span><span class="colorful letter">u</span><span class="colorful letter">r</span><span class="colorful letter">o</span><span class="colorful letter">r</span><span class="colorful letter">a</span>'s Top Picks'</span>
 
 <div class="row m-1 p-1">
     <div class="col-3">
@@ -17,24 +18,26 @@
 <div class="col-9">
     @model ProductsListViewModel
 
-    <h1>Shopping List</h1>
-     
-   
+    <div class="products-grid">
+        <!-- Grid container -->
+        @foreach (Product p in Model.Products)
+        {
+            <div class="product-item" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = @p.ProductId })'" style="cursor: pointer;">
+                <!-- Grid item -->
+                @if (!string.IsNullOrEmpty(@p.ImgLink))
+                {
+                    <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                        <img src="@p.ImgLink" alt="Image for @p.Name" style="width: 200px; height: 200px; object-fit: contain;">
+                    </div>
+                }
+                <p style="font-weight: bold;">@p.Name</p>
+                <p>$@p.Price</p>
+                <!-- Hide or remove the Show Details button as it's redundant now -->
+            </div>
 
-    @foreach (Product p in Model.Products)
-    {
-        <h3>@p.Name</h3>
-            
-        <ul>
-            <li>Price: @p.Price</li>
-            <li>Year: @p.Year</li>
-        </ul>
-
-        <h3>
-            <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.ProductId" class="btn btn-secondary">Show Details</a>
-        </h3>
-    }
-    <div class="pagination">
+        }
+    </div>
+    <div class="pagination" style="style=" display: flex; justify-content: center; align-items: center;">
         @for (int i = 1; i <= Model.PaginationInfo.TotalNumPages; i++)
         {
             <a href="@Url.Action("Shop", new { pageNum = i, productCategory = Model.CurrentProductCategory })" class="page @(Model.PaginationInfo.CurrentPage == i ? "active" : "")">@i</a>

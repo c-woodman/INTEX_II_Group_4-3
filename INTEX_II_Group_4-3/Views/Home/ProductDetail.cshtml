@@ -27,7 +27,7 @@
                 <p>@Model.ProductRec.NumParts Parts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year: @Model.ProductRec.Year</p>
                 <br><br>
                 <form id=@Model.ProductRec.ProductId method="post" asp-page="/Cart">
-                    <input type="hidden" asp-for="ProductRec.ProductId" />
+                    <input type="hidden" asp-for="Product_ID" value="@Model.ProductRec.ProductId">
                     <button type="submit" class="button">Add to Cart</button>
                 </form>
             </div>

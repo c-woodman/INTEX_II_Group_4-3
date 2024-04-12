@@ -380,8 +380,8 @@ public async Task<IActionResult> Index()
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
-            var users = _userManager.Users.ToList();
-            var roles = _roleManager.Roles.ToList();
+            var users = await _userManager.Users.ToListAsync();
+            var roles = await _roleManager.Roles.ToListAsync();
             var userRoles = new Dictionary<string, string>();
             foreach (var user in users)
             {

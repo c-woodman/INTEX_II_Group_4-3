@@ -8,7 +8,7 @@ namespace INTEX_II_Group_4_3.Models
 
         [Key]
         [ForeignKey("ProductRec")]
-        public double product_ID { get; set; }
+        public int product_ID { get; set; }
         //ProductRec is used for referencing in the views
         public Product ProductRec { get; set; }
 

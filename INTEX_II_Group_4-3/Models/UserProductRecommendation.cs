@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace INTEX_II_Group_4_3.Models;
 
-public partial class TopProductRecommendation
+public partial class UserProductRecommendation
 {
 
     [Key]

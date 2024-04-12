@@ -1,0 +1,23 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IQueryable<string>
+
+<div class="d-grid gap-2">
+    <form asp-controller="Home" asp-action="Shop" method="get">
+        <div class="form-group">
+            <label for="productColor">Filter by Color</label>
+            <select class="form-control" id="productColor" name="productColor" onchange="this.form.submit();">
+                <option value="">Select a Color</option>
+                @foreach (string pc in Model ?? Enumerable.Empty<string>())
+                {
+                    <option value="@pc">@pc</option>
+                }
+            </select>
+        </div>
+    </form>
+    <a class="btn btn-outline-secondary mt-2" asp-controller="Home" asp-action="Shop" asp-route-productColor="" asp-route-paeNum="1">Reset Filter</a>
+</div>

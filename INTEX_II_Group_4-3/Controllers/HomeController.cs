@@ -14,6 +14,7 @@ using Microsoft.ML.OnnxRuntime.Tensors;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace INTEX_II_Group_4_3.Controllers
 {
@@ -319,6 +320,7 @@ public async Task<IActionResult> Index()
             return NotFound();
         }
 
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
@@ -341,6 +343,44 @@ public async Task<IActionResult> Index()
             return View(viewModel);
         }
 
+        [HttpGet]
+        public IActionResult AddUser()
+        {
+            var roles = _roleManager.Roles.Select(r => r.Name).ToList();
+            ViewBag.Roles = new SelectList(roles);
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddUser(AddUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(model.RoleName))
+                    {
+                        await _userManager.AddToRoleAsync(user, model.RoleName);
+                    }
+                    return RedirectToAction("Users");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+
+            // Reload roles in case of failure to preserve the dropdown list
+            ViewBag.Roles = new SelectList(_roleManager.Roles.Select(r => r.Name).ToList());
+            return View(model);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users(string userId, string newRole, string command)
@@ -352,14 +392,24 @@ public async Task<IActionResult> Index()
                 return RedirectToAction("Users");
             }
 
+
             if (command == "EditRole" && !string.IsNullOrEmpty(newRole))
             {
                 var currentRoles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, currentRoles);
-                var result = await _userManager.AddToRoleAsync(user, newRole);
-                if (!result.Succeeded)
+                var removalResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (!removalResult.Succeeded)
                 {
-                    // Optionally handle errors here
+                    // Log or handle the removal error
+                    _logger.LogError($"Failed to remove roles for user {user.Email}: {string.Join(", ", removalResult.Errors.Select(e => e.Description))}");
+                    // Return to a view that shows the error, or handle it as needed
+                }
+
+                var addToRoleResult = await _userManager.AddToRoleAsync(user, newRole);
+                if (!addToRoleResult.Succeeded)
+                {
+                    // Log or handle the add role error
+                    _logger.LogError($"Failed to add role for user {user.Email}: {string.Join(", ", addToRoleResult.Errors.Select(e => e.Description))}");
+                    // Return to a view that shows the error, or handle it as needed
                 }
             }
             else if (command == "Delete")

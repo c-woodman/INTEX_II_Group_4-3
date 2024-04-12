@@ -33,19 +33,141 @@ namespace INTEX_II_Group_4_3.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
 
-            try
-            {
-                _session = new InferenceSession(@"C:\Path\To\Your\FraudDetection.onnx");
-                _logger.LogInformation("ONNX loaded successfully.");
+                try
+                {
+                    _session = new InferenceSession(@"C:\Users\malea\source\repos\INTEX_II_Group_4-3\INTEX_II_Group_4-3\FraudDetection.onnx");
+                    _logger.LogInformation("ONNX loaded successfully.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Failed to load ONNX model: {ex.Message}");
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to load ONNX model: {ex.Message}");
-            }
-        }
 
-        
-        public IActionResult Shop(int pageNum, string? productCategory, string? productColor, int pageSize = 10)
+            [HttpPost]
+            public IActionResult Predict(int Time, int Amount, int DayOfWeek, int EntryMode, int TypeOfTransaction, int CountryOfTransaction, int ShippingAddress, int Bank, int TypeOfCard, int Fraud)
+            {
+                // Dictionary mapping the numeric prediction to a fraud classification
+                var class_type_dict = new Dictionary<int, string>
+            {
+                { 0, "Not Fraud" },
+                { 1, "Fraud" }
+            };
+
+                try
+                {
+                    var input = new List<float> {Time, Amount, DayOfWeek, EntryMode, TypeOfTransaction, CountryOfTransaction, ShippingAddress, Bank, TypeOfCard, Fraud };
+                    var inputTensor = new DenseTensor<float>(input.ToArray(), new[] { 1, input.Count });
+
+                    var inputs = new List<NamedOnnxValue>
+                {
+                    NamedOnnxValue.CreateFromTensor("float_input", inputTensor)
+                };
+
+                    using (var results = _session.Run(inputs)) // makes the prediction with the inputs from the form (i.e. class_type 1-7)
+                    {
+                        var prediction = results.FirstOrDefault(item => item.Name == "output_label")?.AsTensor<long>().ToArray();
+                        if (prediction != null && prediction.Length > 0)
+                        {
+                            // Use the prediction to get the fraud or not from the dictionary
+                            var fraudClassify = class_type_dict.GetValueOrDefault((int)prediction[0], "Unknown");
+                            ViewBag.Prediction = fraudClassify;
+                        }
+                        else
+                        {
+                            ViewBag.Prediction = "Error: Unable to make a prediction.";
+                        }
+                    }
+
+                    _logger.LogInformation("Prediction executed successfully.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error during prediction: {ex.Message}");
+                    ViewBag.Prediction = "Error during prediction.";
+                }
+
+                return View("Index");
+            }
+
+            public IActionResult ShowPredictions()
+            {
+                var records = _repo.Orders
+                //.OrderByDescending(o=>o.Date)
+                .Take(20).ToList();  // Fetch all records
+                var predictions = new List<FraudPrediction>();  // Your ViewModel for the view
+
+                // Dictionary mapping the numeric prediction to a fraud classification
+                var class_type_dict = new Dictionary<int, string>
+            {
+                { 0, "Not Fraud" },
+                { 1, "Fraud" }
+            };
+
+                foreach (var record in records)
+                {
+                    var input = new List<float>
+                {
+                    (float)record.Time,
+                    (float)record.Amount,
+
+                    record.DayOfWeek == "Mon" ? 1:0,
+                    record.DayOfWeek == "Tue" ? 1:0,
+                    record.DayOfWeek == "Wed" ? 1:0,
+                    record.DayOfWeek == "Thu" ? 1:0,
+                    record.DayOfWeek == "Fri" ? 1:0,
+                    record.DayOfWeek == "Sat" ? 1:0,
+                    record.DayOfWeek == "Sun" ? 1:0,
+
+                    record.EntryMode == "PIN" ? 1:0,
+                    record.EntryMode == "Tap" ? 1:0,
+
+                    record.TypeOfTransaction == "Online" ? 1:0,
+                    record.TypeOfTransaction == "POS" ? 1:0,
+
+                    record.CountryOfTransaction == "India" ? 1:0,
+                    record.CountryOfTransaction == "Russia" ? 1:0,
+                    record.CountryOfTransaction == "USA" ? 1:0,
+                    record.CountryOfTransaction == "United Kingdom" ? 1:0,
+
+                    record.ShippingAddress == "India" ? 1:0,
+                    record.ShippingAddress == "Russia" ? 1:0,
+                    record.ShippingAddress == "USA" ? 1:0,
+                    record.ShippingAddress == "United Kingdom" ? 1:0,
+
+                    record.Bank == "RBS" ? 1:0,
+                    record.Bank == "Lloyds" ? 1:0,
+                    record.Bank == "Barclays" ? 1:0,
+                    record.Bank == "Halifax" ? 1:0,
+                    record.Bank == "Monzo" ? 1:0,
+                    record.Bank == "HSBC" ? 1:0,
+                    record.Bank == "Metro" ? 1:0,
+
+                    record.TypeOfCard == "MasterCard" ? 1:0,
+                    record.TypeOfCard == "Visa" ? 1:0,
+                };
+                    var inputTensor = new DenseTensor<float>(input.ToArray(), new[] { 1, input.Count });
+
+                    var inputs = new List<NamedOnnxValue>
+                {
+                    NamedOnnxValue.CreateFromTensor("float_input", inputTensor)
+                };
+
+                    string predictionResult;
+                    using (var results = _session.Run(inputs))
+                    {
+                        var prediction = results.FirstOrDefault(item => item.Name == "output_label")?.AsTensor<long>().ToArray();
+                        predictionResult = prediction != null && prediction.Length > 0 ? class_type_dict.GetValueOrDefault((int)prediction[0], "Unknown") : "Error in prediction";
+                    }
+
+                    predictions.Add(new FraudPrediction { Order = record, Prediction = predictionResult }); // Adds the order information and prediction for that order to FraudPrediction viewmodel
+                }
+
+                return View(predictions);
+            }
+
+
+            public IActionResult Shop(int pageNum, string? productCategory, string? productColor, int pageSize = 10)
         {
             pageNum = Math.Max(pageNum, 1);
 

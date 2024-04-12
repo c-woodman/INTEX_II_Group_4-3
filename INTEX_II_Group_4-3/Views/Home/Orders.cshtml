@@ -1,4 +1,10 @@
-﻿<div class = "container">
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model OrdersListViewModel
+<div class = "container">
     <h1>Orders</h1>
     <br><br>
 <table>
@@ -20,7 +26,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var order in Model)
+        @foreach (var order in Model.Orders)
         {
             <tr>
                     <td>@order.TransactionId</td>
@@ -40,4 +46,11 @@
         }
     </tbody>
 </table>
+<br>
+    <div class="pagination" style="style=" display: flex; justify-content: center; align-items: center;">
+        @for (int i = 1; i <= Model.PaginationInfo.TotalNumPages; i++)
+        {
+            <a href="@Url.Action("Shop", new { pageNum = i})" class="page @(Model.PaginationInfo.CurrentPage == i ? "active" : "")">@i</a>
+        }
+    </div>
 </div>

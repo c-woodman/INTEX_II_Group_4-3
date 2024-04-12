@@ -72,7 +72,8 @@ namespace INTEX_II_Group_4_3.Models
         // In EFLegoRepository
         public IQueryable<TopProductRecommendation> TopProductRecommendations()
         {
-            return _context.TopProductRecommendations;
+            return _context.TopProductRecommendations
+                .Include(tpr => tpr.ProductRec);
         }
 
         public Task SaveChangesAsync()

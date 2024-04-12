@@ -86,6 +86,7 @@ namespace INTEX_II_Group_4_3.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Products()
         {
             // Await the asynchronous operation and obtain the result.
@@ -105,6 +106,17 @@ namespace INTEX_II_Group_4_3.Controllers
         public IActionResult Cart()
         {
             return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Orders()
+        {
+            var orders = _repo.Orders.ToList(); // Assuming '_context' is your database context
+            if (orders == null)
+            {
+                orders = new List<Order>(); // Initialize as empty if null to avoid null reference in the view
+            }
+            return View(orders);
         }
 
         public IActionResult About()

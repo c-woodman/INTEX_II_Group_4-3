@@ -40,7 +40,7 @@ namespace INTEX_II_Group_4_3.Controllers
         }
 
         
-        public IActionResult Shop(int pageNum, string? productCategory, string? productColor, int pageSize = 5)
+        public IActionResult Shop(int pageNum, string? productCategory, string? productColor, int pageSize = 10)
         {
             pageNum = Math.Max(pageNum, 1);
 
@@ -154,7 +154,8 @@ namespace INTEX_II_Group_4_3.Controllers
         [HttpGet]
         public IActionResult Checkout()
         {
-            return View(new Order());
+            return View();
+            //return View(new Order());
         }
         // Post Checkout to database
         [HttpPost]

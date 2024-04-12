@@ -22,11 +22,16 @@ namespace INTEX_II_Group_4_3.Controllers
         private readonly ILegoRepository _repo;
         private readonly InferenceSession _session;
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public HomeController(ILegoRepository temp, ILogger<HomeController> logger)
+
+        public HomeController(ILegoRepository temp, ILogger<HomeController> logger, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _repo = temp;
             _logger = logger;
+            _userManager = userManager;
+            _roleManager = roleManager;
 
             try
             {
@@ -77,49 +82,61 @@ namespace INTEX_II_Group_4_3.Controllers
             return View(productData);
         }
 
-        //private readonly ILogger<HomeController> _logger;
-        //public HomeController(ILogger<HomeController> logger, LegoInfoContext context)
+
+        //private void AddErrors(IdentityResult result)
         //{
-        //    _logger = logger;
-        //    _context = context;
-        //}
-
-        //public IActionResult Index(int productID)
-        //{
-        //    var recommendations = _repo.TopProductRecommendations(productID).FirstOrDefault(p => p.product_ID ==productID);
-        //    return View(recommendations);
-        //}
-
-        //public async Task<IActionResult> Index(int productID)
-        //{
-        //    var recommendations = await _repo.TopProductRecommendations(productID)
-        //        .FirstOrDefaultAsync(p => p.product_ID == productID);
-        //        //.ToList() // Convert to a list
-
-        //    return View(recommendations);
-        //}
-
-        //public async Task<IActionResult> Index(int productID)
-        //{
-        //    var recommendation = await _repo.TopProductRecommendations(productID)
-        //        .FirstOrDefaultAsync(p => p.product_ID == productID);
-
-        //    // Create a list with the single recommendation
-        //    var recommendationsList = new List<TopProductRecommendation>();
-        //    if (recommendation != null)
+        //    foreach (var error in result.Errors)
         //    {
-        //        recommendationsList.Add(recommendation);
+        //        ModelState.AddModelError(string.Empty, error.Description);
         //    }
-
-        //    return View(recommendationsList);
         //}
 
-        public async Task<IActionResult> Index()
+ 
+
+
+//private readonly ILogger<HomeController> _logger;
+//public HomeController(ILogger<HomeController> logger, LegoInfoContext context)
+//{
+//    _logger = logger;
+//    _context = context;
+//}
+
+//public IActionResult Index(int productID)
+//{
+//    var recommendations = _repo.TopProductRecommendations(productID).FirstOrDefault(p => p.product_ID ==productID);
+//    return View(recommendations);
+//}
+
+//public async Task<IActionResult> Index(int productID)
+//{
+//    var recommendations = await _repo.TopProductRecommendations(productID)
+//        .FirstOrDefaultAsync(p => p.product_ID == productID);
+//        //.ToList() // Convert to a list
+
+//    return View(recommendations);
+//}
+
+//public async Task<IActionResult> Index(int productID)
+//{
+//    var recommendation = await _repo.TopProductRecommendations(productID)
+//        .FirstOrDefaultAsync(p => p.product_ID == productID);
+
+//    // Create a list with the single recommendation
+//    var recommendationsList = new List<TopProductRecommendation>();
+//    if (recommendation != null)
+//    {
+//        recommendationsList.Add(recommendation);
+//    }
+
+//    return View(recommendationsList);
+//}
+
+public async Task<IActionResult> Index()
         {
             var recommendations = await _repo.TopProductRecommendations()
                 .ToListAsync();
 
-            return View(recommendations);
+    return View(recommendations);
         }
 
 
@@ -235,6 +252,8 @@ namespace INTEX_II_Group_4_3.Controllers
             }
         }
 
+
+
         //Add product
         [HttpGet]
         public IActionResult CreateProduct()
@@ -300,8 +319,66 @@ namespace INTEX_II_Group_4_3.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Users()
+        {
+            var users = _userManager.Users.ToList();
+            var roles = _roleManager.Roles.ToList();
+            var userRoles = new Dictionary<string, string>();
+            foreach (var user in users)
+            {
+                var roleList = await _userManager.GetRolesAsync(user);
+                userRoles[user.Id] = roleList.FirstOrDefault() ?? "No role";
+            }
 
+            var viewModel = new UserManagementViewModel
+            {
+                Users = users,
+                UserRoles = userRoles,
+                Roles = roles
+            };
 
+            return View(viewModel);
+        }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Users(string userId, string newRole, string command)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                // Optionally add error handling here
+                return RedirectToAction("Users");
+            }
+
+            if (command == "EditRole" && !string.IsNullOrEmpty(newRole))
+            {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                var result = await _userManager.AddToRoleAsync(user, newRole);
+                if (!result.Succeeded)
+                {
+                    // Optionally handle errors here
+                }
+            }
+            else if (command == "Delete")
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                {
+                    // Optionally handle errors here
+                }
+            }
+
+            return RedirectToAction("Users");
+        }
     }
 }
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+﻿@model UserManagementViewModel
+
+<form method="post">
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Current Role</th>
+                <th>Change Role To</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@Model.UserRoles[user.Id]</td>
+                    <td>
+                        <select name="newRole">
+                            @foreach (var role in Model.Roles)
+                            {
+                                <option value="@role.Name">@role.Name</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" name="command" value="EditRole" formaction="@Url.Action("Users", "Home", new { userId = user.Id })">Change Role</button>
+                        <button type="submit" name="command" value="Delete" formaction="@Url.Action("Users", "Home", new { userId = user.Id })">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>

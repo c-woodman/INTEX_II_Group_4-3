@@ -11,6 +11,7 @@ namespace INTEX_II_Group_4_3.Models
             _context = temp;
         }
         public IQueryable<Product> Products => _context.Products;
+        public IQueryable<Order> Orders => _context.Orders;
 
         //admin edit product table
         public void AddProduct(Product product)
@@ -26,7 +27,7 @@ namespace INTEX_II_Group_4_3.Models
 
         public void UpdateProduct(Product product)
         {
-            _context.Update(product);
+            _context.Entry(product).State = EntityState.Modified;
             _context.SaveChanges();
         }
 

@@ -613,12 +613,12 @@ table {
 
     table tr th {
         vertical-align: middle;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.4rem;
     }
 
     table tr td {
         vertical-align: middle;
-        padding: 0.5rem 0.7rem;
+        padding: 0.4rem 0.4rem;
         min-width: 70px;
     }
 

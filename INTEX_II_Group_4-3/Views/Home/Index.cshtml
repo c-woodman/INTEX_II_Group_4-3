@@ -47,7 +47,7 @@
         {
             @foreach (UserProductRecommendation product in Model.UserProductRecommendations)
             {
-                <div class="product-card">
+                <div class="product-card" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = product.ProductId })'" style="cursor: pointer;">
                     <img src="@product.ImgLink" alt="@product.Name">
                     <p>@product.Name</p>
                     <p style="font-weight: bold;">$@product.Price.ToString("0.00")</p>

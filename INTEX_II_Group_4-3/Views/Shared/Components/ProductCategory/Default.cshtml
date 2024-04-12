@@ -8,7 +8,6 @@
 
 <form asp-controller="Home" asp-action="Shop" method="get">
     <div class="form-group">
-        <label for="productCategory">Filter by Category</label>
         <select class="form-control" id="productCategory" name="productCategory" onchange="this.form.submit();">
             <option value="">Select a Category</option>
             @foreach (string pt in Model ?? Enumerable.Empty<string>())

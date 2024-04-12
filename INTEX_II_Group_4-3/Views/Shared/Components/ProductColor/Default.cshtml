@@ -9,7 +9,6 @@
 <div class="d-grid gap-2">
     <form asp-controller="Home" asp-action="Shop" method="get">
         <div class="form-group">
-            <label for="productColor">Filter by Color</label>
             <select class="form-control" id="productColor" name="productColor" onchange="this.form.submit();">
                 <option value="">Select a Color</option>
                 @foreach (string pc in Model ?? Enumerable.Empty<string>())

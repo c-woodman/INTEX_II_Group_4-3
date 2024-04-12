@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-@model List<TopProductRecommendation>
+@model RecommendationListViewModel
 
 <div class="image-background">
     <div class="overlay-text">
@@ -23,56 +23,63 @@
 <div class="parallax">
     <div class="text-box">
         @{
-            var product1 = Model.First(); 
+            var product1 = Model.TopProductRecommendations.First();
         }
 
         <p>Featured Build</p>
-        <h2>@product1.ProductRec.Name</h2>
+        <h2>@product1.Name</h2>
         <br>
-        <a href='@Url.Action("ProductDetail", "Home", new { id = product1.ProductRec.ProductId })' class="ghostButton" style="text-decoration: none; color: #FFBF00;">View Details</a>
+        <a href="@Url.Action("ProductDetail", "Home", new { id = product1.ProductId })" class="ghostButton" style="text-decoration: none; color: #FFBF00;">View Details</a>
     </div>
     <div class="image-box" style="max-height: 400px; align-items: center; overflow: hidden;">
-        <img src="@product1.ProductRec.ImgLink" alt="Image for @product1.ProductRec.Name" style="width: 400px; height: 400px; object-fit: contain;">
+        <img src="@product1.ImgLink" alt="Image for @product1.Name" style="width: 400px; height: 400px; object-fit: contain;">
     </div>
 </div>
 
-<br><br>
+<br>
+<br>
 <div class="container">
     <h3>Recommended</h3>
     <br><br>
-    <div class="products-grid">
 
-        @{
-            int startIndex = 1; // Index for the second item
-            int endIndex = 4; // Index for the fifth item
-        }
-
-    @foreach (var product in Model)
-    {
-        int index = Model.IndexOf(product); // Get the current index of the product
-        if (index >= startIndex && index <= endIndex)
+    <div class="product-row">
+        @if (User.Identity.IsAuthenticated)
         {
-            <div class="product-row" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = product.ProductRec.ProductId })'" style="cursor: pointer;">
-                <div class="product-card">
-                    <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
-                            <img src="@product.ProductRec.ImgLink" alt="Image for @product.ProductRec.Name" class="image-on-right">
-                    </div>
-                    <p>@product.ProductRec.Name</p>
-                    <p style="font-weight: bold;">$@product.ProductRec.Price.ToString("0.00")</p>
+            @foreach (UserProductRecommendation product in Model.UserProductRecommendations)
+            {
+                <div class="product-card" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = product.ProductId })'" style="cursor: pointer;">
+                    <img src="@product.ImgLink" alt="@product.Name">
+                    <p>@product.Name</p>
+                    <p style="font-weight: bold;">$@product.Price.ToString("0.00")</p>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="products-grid">
+                @for (int i = 1; i <= 4; i++)
+                {
+                    var product = Model.TopProductRecommendations.Skip(i).First();
+                    <div class="product-row" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = product.ProductId })'" style="cursor: pointer;">
+                        <div class="product-card">
+                            <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                                <img src="@product.ImgLink" alt="Image for @product.Name" class="image-on-right">
+                            </div>
+                            <p>@product.Name</p>
+                            <p style="font-weight: bold;">$@product.Price.ToString("0.00")</p>
+                        </div>
+                    </div>
+                }
             </div>
         }
-    }
     </div>
-    <br><br>
-
-    
-    <div style="text-align: center;">
-        <a href="/Home/Shop" class="button" style="text-decoration: none; color: #7A6200;">Explore</a>
-    </div>
-
     <br><br>
 </div>
 
+<div style="text-align: center;">
+    <a href="@Url.Action("Shop", "Home")" class="button" style="text-decoration: none; color: #7A6200;">Explore</a>
+</div>
 
-
+<br>
+<br>
+</div>

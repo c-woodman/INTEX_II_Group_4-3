@@ -12,10 +12,12 @@
 <div class="row m-1 p-1">
     <div class="col-3">
         <vc:product-category />
+        <br />
         <vc:product-color />
         <br />
         <form asp-action="Shop" method="get">
             <select name="pageSize" onchange="this.form.submit()">
+                <option value="">Select display amount</option>
                 <option value="5">Display by 5</option>
                 <option value="10">Display by 10</option>
                 <option value="20">Display by 20</option>

@@ -1,5 +1,6 @@
 using INTEX_II_Group_4_3.Infrastructure;
 using INTEX_II_Group_4_3.Models;
+using INTEX_II_Group_4_3.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Build.Evaluation;
@@ -21,8 +22,7 @@ namespace INTEX_II_Group_4_3.Pages
         }
         public IActionResult OnPost(int Product_ID)
         {
-            Product prod = _repo.Products
-                .FirstOrDefault(x =>  x.ProductId == Product_ID);
+            Product prod = _repo.Products.FirstOrDefault(x =>  x.ProductId == Product_ID);
 
             if (prod != null)
             {
@@ -38,7 +38,21 @@ namespace INTEX_II_Group_4_3.Pages
         {
             Cart.RemoveLine(Cart.Lines.First(x => x.Product.ProductId == productId).Product);
 
-            return RedirectToPage(Cart);
+            return RedirectToPage("/Cart");
         }
+        //public IActionResult OnPostCheckout()
+        //{
+        //    var order = new Order
+        //    {
+        //        Amount = (double)Cart.CalculateTotal()
+        //    };
+
+        //    var checkoutViewModel = new CheckoutViewModel
+        //    {
+        //        Amount = (int)order.Amount
+        //    };
+
+        //    return RedirectToPage("/Home/Checkout", checkoutViewModel);
+        //}
     }
 }

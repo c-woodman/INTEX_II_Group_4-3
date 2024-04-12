@@ -127,7 +127,7 @@ namespace INTEX_II_Group_4_3.Controllers
         //    var products = _repo.Products.ToListAsync();
         //    return View(products);
         //}
-        public IActionResult Products()
+        public async Task<IActionResult> Products()
         {
             // Await the asynchronous operation and obtain the result.
             var products = await _repo.Products.ToListAsync();

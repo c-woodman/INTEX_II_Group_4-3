@@ -288,6 +288,15 @@ public async Task<IActionResult> Index()
             //return View(new Order());
         }
         // Post Checkout to database
+
+        [HttpPost]
+        public IActionResult Checkout(Order l)
+        {
+            var data = l;
+
+            return View("Confirmation");
+        }
+
         [HttpPost]
         public IActionResult Create(Order o)
         {

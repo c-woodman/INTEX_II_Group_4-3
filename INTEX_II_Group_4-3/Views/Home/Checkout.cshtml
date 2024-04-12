@@ -1,4 +1,5 @@
-﻿@model Order
+﻿@inject Cart cart
+@model Order
 
 @* transaction_ID, customer_ID, date, day_of_week, time, type_of_card, entry_mode,
 amount, type_of_transaction, country_of_transaction, shipping_address, bank, fraud *@
@@ -85,17 +86,28 @@ amount, type_of_transaction, country_of_transaction, shipping_address, bank, fra
             <br />
             <div class="col-md-6">
                 <div>
-                    <label>Total Amount: </label>
+                    @if (cart.Lines.Any())
+                    {
+                        <b>Your Cart: </b> @cart.Lines.Sum(x=>x.Quantity) <b>item(s)</b>
+                        <br />
+                        <b>Total: </b> @cart.CalculateTotal().ToString("c")
+                    }
+ @*                    <label>Total Amount: </label> *@
                 </div>
             </div>
 
-            
-            <!-- Submit Button -->
+                <!-- Submit Button -->
             @if (User.Identity.IsAuthenticated)
             {
-                <div class="form-group mt-3">
-                    <button type="submit" class="button">Submit</button>
-                </div>
+
+                    <div class="form-group mt-3">
+                        <form asp-controller="Home" asp-action="Confirmation" method="post">
+                            <div class="form-group mt-3">
+                                <button type="submit" class="button">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+
             }
             else
             {

@@ -24,12 +24,13 @@
                     <td>@user.Email</td>
                     <td>@Model.UserRoles[user.Id]</td>
                     <td>
-                        <select name="newRole">
-                            @foreach (var role in Model.Roles)
-                            {
-                                <option value="@role.Name">@role.Name</option>
-                            }
-                        </select>
+                            <select name="newRole">
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <option value="@role.Name">@role.Name</option>
+                                }
+                            </select>
+
                     </td>
                     <td>
                         <button type="submit" name="command" value="EditRole" formaction="@Url.Action("Users", "Home", new { userId = user.Id })">Change Role</button>
@@ -40,6 +41,5 @@
         </tbody>
     </table>
 
-    <a href="@Url.Action("AddUser", "Home")" class="btn btn-primary">Add New User</a>
 </form>
 </div>

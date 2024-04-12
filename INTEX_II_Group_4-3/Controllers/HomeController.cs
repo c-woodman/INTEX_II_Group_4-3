@@ -377,7 +377,6 @@ public async Task<IActionResult> Index()
             return NotFound();
         }
 
-        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
@@ -399,45 +398,6 @@ public async Task<IActionResult> Index()
 
             return View(viewModel);
         }
-
-        [HttpGet]
-        public IActionResult AddUser()
-        {
-            var roles = _roleManager.Roles.Select(r => r.Name).ToList();
-            ViewBag.Roles = new SelectList(roles);
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddUser(AddUserViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    if (!string.IsNullOrEmpty(model.RoleName))
-                    {
-                        await _userManager.AddToRoleAsync(user, model.RoleName);
-                    }
-                    return RedirectToAction("Users");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-            }
-
-            // Reload roles in case of failure to preserve the dropdown list
-            ViewBag.Roles = new SelectList(_roleManager.Roles.Select(r => r.Name).ToList());
-            return View(model);
-        }
-
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users(string userId, string newRole, string command)
@@ -445,28 +405,25 @@ public async Task<IActionResult> Index()
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                // Optionally add error handling here
-                return RedirectToAction("Users");
+                ModelState.AddModelError("", "User not found");
+                return View(); // Return to the same view with an error message
             }
-
 
             if (command == "EditRole" && !string.IsNullOrEmpty(newRole))
             {
                 var currentRoles = await _userManager.GetRolesAsync(user);
-                var removalResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
-                if (!removalResult.Succeeded)
+                var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (!removeResult.Succeeded)
                 {
-                    // Log or handle the removal error
-                    _logger.LogError($"Failed to remove roles for user {user.Email}: {string.Join(", ", removalResult.Errors.Select(e => e.Description))}");
-                    // Return to a view that shows the error, or handle it as needed
+                    ModelState.AddModelError("", "Failed to remove old roles");
+                    return View(); // Show error message
                 }
 
-                var addToRoleResult = await _userManager.AddToRoleAsync(user, newRole);
-                if (!addToRoleResult.Succeeded)
+                var addRoleResult = await _userManager.AddToRoleAsync(user, newRole);
+                if (!addRoleResult.Succeeded)
                 {
-                    // Log or handle the add role error
-                    _logger.LogError($"Failed to add role for user {user.Email}: {string.Join(", ", addToRoleResult.Errors.Select(e => e.Description))}");
-                    // Return to a view that shows the error, or handle it as needed
+                    ModelState.AddModelError("", "Failed to add new role");
+                    return View(); // Show error message
                 }
             }
             else if (command == "Delete")
@@ -474,12 +431,14 @@ public async Task<IActionResult> Index()
                 var result = await _userManager.DeleteAsync(user);
                 if (!result.Succeeded)
                 {
-                    // Optionally handle errors here
+                    ModelState.AddModelError("", "Failed to delete user");
+                    return View(); // Show error message
                 }
             }
 
             return RedirectToAction("Users");
         }
+
     }
 }
 

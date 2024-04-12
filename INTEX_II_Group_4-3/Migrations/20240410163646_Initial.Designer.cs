@@ -145,8 +145,8 @@ namespace INTEX_II_Group_4_3.Migrations
 
             modelBuilder.Entity("INTEX_II_Group_4_3.Models.Order", b =>
                 {
-                    b.Property<double>("TransactionId")
-                        .HasColumnType("float")
+                    b.Property<int>("TransactionId")
+                        .HasColumnType("int")
                         .HasColumnName("transaction_ID");
 
                     b.Property<double>("Amount")

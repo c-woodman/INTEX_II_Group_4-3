@@ -25,18 +25,20 @@ namespace INTEX_II_Group_4_3.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        public readonly string _onnxModelPath;
 
 
-        public HomeController(ILegoRepository temp, ILogger<HomeController> logger, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public HomeController(ILegoRepository temp, ILogger<HomeController> logger, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IHostEnvironment hostEnvironment)
         {
             _repo = temp;
+            _onnxModelPath = System.IO.Path.Combine(hostEnvironment.ContentRootPath, "FraudDetection.onnx");
             _logger = logger;
             _userManager = userManager;
             _roleManager = roleManager;
 
-                try
+                try 
                 {
-                    _session = new InferenceSession(@"C:\Users\malea\source\repos\INTEX_II_Group_4-3\INTEX_II_Group_4-3\FraudDetection.onnx");
+                    _session = new InferenceSession(_onnxModelPath);
                     _logger.LogInformation("ONNX loaded successfully.");
                 }
                 catch (Exception ex)
@@ -45,53 +47,117 @@ namespace INTEX_II_Group_4_3.Controllers
                 }
             }
 
-            [HttpPost]
-            public IActionResult Predict(int Time, int Amount, int DayOfWeek, int EntryMode, int TypeOfTransaction, int CountryOfTransaction, int ShippingAddress, int Bank, int TypeOfCard, int Fraud)
+            // Render the Checkout View
+            [HttpGet]
+            public IActionResult Checkout()
             {
-                // Dictionary mapping the numeric prediction to a fraud classification
-                var class_type_dict = new Dictionary<int, string>
+                return View();
+                //return View(new Order());
+            }
+
+        [HttpPost]
+        public IActionResult Checkout(FraudPrediction Fraud)
+        {
+            // Dictionary mapping the numeric prediction to a fraud classification
+            var class_type_dict = new Dictionary<int, string>
+    {
+        { 0, "Not Fraud" },
+        { 1, "Fraud" }
+    };
+
+            float Time = (float)Fraud.Order.Time;
+            float Amount = (float)Fraud.Order.Amount;
+            float Year = DateTime.Now.Year;
+            float Month = DateTime.Now.Month;
+            float Day = DateTime.Now.Day;
+
+            float country_of_transaction_UK = Fraud.Order.CountryOfTransaction.Equals("United Kingdom", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float country_of_transaction_India = Fraud.Order.CountryOfTransaction.Equals("India", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float country_of_transaction_Russia = Fraud.Order.CountryOfTransaction.Equals("Russia", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float country_of_transaction_USA = Fraud.Order.CountryOfTransaction.Equals("USA", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+
+            float entry_mode_PIN = Fraud.Order.EntryMode.Equals("PIN", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float entry_mode_Tap = Fraud.Order.EntryMode.Equals("Tap", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+
+            float type_of_transaction_Online = Fraud.Order.TypeOfTransaction.Equals("Online", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float type_of_transaction_POS = Fraud.Order.TypeOfTransaction.Equals("POS", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+
+            float shipping_address_India = Fraud.Order.ShippingAddress.Equals("India", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float shipping_address_Russia = Fraud.Order.ShippingAddress.Equals("Russia", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float shipping_address_USA = Fraud.Order.ShippingAddress.Equals("USA", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float shipping_address_UK = Fraud.Order.ShippingAddress.Equals("United Kingdom", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+
+            float bank_HSBC = Fraud.Order.Bank.Equals("HSBC", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float bank_Halifax = Fraud.Order.Bank.Equals("Halifax", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float bank_Lloyds = Fraud.Order.Bank.Equals("Lloyds", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float bank_Metro = Fraud.Order.Bank.Equals("Metro", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float bank_Monzo = Fraud.Order.Bank.Equals("Monzo", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float bank_RBS = Fraud.Order.Bank.Equals("RBS", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+
+            DateTime currentDate = DateTime.Now;
+            string dayOfWeekString = currentDate.ToString("ddd"); // This will give you "Mon", "Tue", etc.
+
+            float day_of_week_Mon = dayOfWeekString.Equals("Mon", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float day_of_week_Tue = dayOfWeekString.Equals("Tue", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float day_of_week_Wed = dayOfWeekString.Equals("Wed", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float day_of_week_Thu = dayOfWeekString.Equals("Thu", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float day_of_week_Sat = dayOfWeekString.Equals("Sat", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+            float day_of_week_Sun = dayOfWeekString.Equals("Sun", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+
+            float type_of_card_Visa = Fraud.Order.EntryMode.Equals("Visa", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
+
+            try
             {
-                { 0, "Not Fraud" },
-                { 1, "Fraud" }
-            };
+                var input = new List<float>
+        {
+            Time, Amount, Year, Month, Day, day_of_week_Mon, day_of_week_Sat, day_of_week_Sun, day_of_week_Thu,
+            day_of_week_Tue, day_of_week_Wed, entry_mode_PIN, entry_mode_Tap, type_of_transaction_Online,
+            type_of_transaction_POS, country_of_transaction_India, country_of_transaction_Russia,
+            country_of_transaction_USA, country_of_transaction_UK, shipping_address_India,
+            shipping_address_Russia, shipping_address_USA, shipping_address_UK, bank_HSBC,
+            bank_Halifax, bank_Lloyds, bank_Metro, bank_Monzo, bank_RBS, type_of_card_Visa
+        };
+                var inputTensor = new DenseTensor<float>(input.ToArray(), new[] { 1, input.Count });
 
-                try
+                var inputs = new List<NamedOnnxValue>
+        {
+            NamedOnnxValue.CreateFromTensor("float_input", inputTensor)
+        };
+
+                using (var results = _session.Run(inputs)) // makes the prediction with the inputs from the form
                 {
-                    var input = new List<float> {Time, Amount, DayOfWeek, EntryMode, TypeOfTransaction, CountryOfTransaction, ShippingAddress, Bank, TypeOfCard, Fraud };
-                    var inputTensor = new DenseTensor<float>(input.ToArray(), new[] { 1, input.Count });
-
-                    var inputs = new List<NamedOnnxValue>
-                {
-                    NamedOnnxValue.CreateFromTensor("float_input", inputTensor)
-                };
-
-                    using (var results = _session.Run(inputs)) // makes the prediction with the inputs from the form (i.e. class_type 1-7)
+                    var prediction = results.FirstOrDefault(item => item.Name == "output_label")?.AsTensor<long>().ToArray();
+                    if (prediction != null && prediction.Length > 0)
                     {
-                        var prediction = results.FirstOrDefault(item => item.Name == "output_label")?.AsTensor<long>().ToArray();
-                        if (prediction != null && prediction.Length > 0)
+                        var fraudClassify = class_type_dict.GetValueOrDefault((int)prediction[0], "Unknown");
+
+                        if (fraudClassify == "Fraud")
                         {
-                            // Use the prediction to get the fraud or not from the dictionary
-                            var fraudClassify = class_type_dict.GetValueOrDefault((int)prediction[0], "Unknown");
-                            ViewBag.Prediction = fraudClassify;
+                            ViewBag.Prediction = "Transaction is classified as Fraud.";
+                            return View("ConfirmationFraud");
                         }
                         else
                         {
-                            ViewBag.Prediction = "Error: Unable to make a prediction.";
+                            ViewBag.Prediction = "Transaction is classified as Not Fraud.";
+                            return View("ConfirmationOK");
                         }
                     }
-
-                    _logger.LogInformation("Prediction executed successfully.");
+                    else
+                    {
+                        ViewBag.Prediction = "Error: Unable to make a prediction.";
+                        return View("Error"); // Ensure you have an Error view to handle this case
+                    }
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error during prediction: {ex.Message}");
-                    ViewBag.Prediction = "Error during prediction.";
-                }
-
-                return View("Index");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error during prediction: {ex.Message}");
+                ViewBag.Prediction = "Error during prediction.";
+                return View("Error"); // Ensure you have an Error view to handle exceptions
+            }
+        }
 
-            public IActionResult ShowPredictions()
+        public IActionResult ShowPredictions()
             {
                 var records = _repo.Orders
                 //.OrderByDescending(o=>o.Date)
@@ -107,7 +173,10 @@ namespace INTEX_II_Group_4_3.Controllers
 
                 foreach (var record in records)
                 {
-                    var input = new List<float>
+                //var january1_2022 = new DateTime(2022, 1, 1);
+                //var daysSinceJan12022 = record.Date.HasValue ? Math.Abs((record.Date.Value - january1_2022).Days) : 0;
+
+                var input = new List<float>
                 {
                     (float)record.Time,
                     (float)record.Amount,
@@ -403,13 +472,6 @@ public async Task<IActionResult> Index()
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        // Render the Checkout View
-        [HttpGet]
-        public IActionResult Checkout()
-        {
-            return View();
-            //return View(new Order());
-        }
         // Post Checkout to database
         [HttpPost]
         public IActionResult Create(Order o)

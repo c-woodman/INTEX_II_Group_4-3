@@ -39,9 +39,16 @@ public class Program
 
         builder.Services.AddControllersWithViews();
 
-//builder.Services.AddSingleton<InferenceSession>(
-//  new InferenceSession("C:\\Users\\malea\\source\\repos\\INTEX_II_Group_4-3\\INTEX_II_Group_4-3\\FraudDetection.onnx")
-//);
+        builder.Services.AddSingleton<InferenceSession>(serviceProvider =>
+        {
+            var env = serviceProvider.GetService<IHostEnvironment>();
+            var modelPath = Path.Combine(env.ContentRootPath, "FraudDetection.onnx");
+            return new InferenceSession(modelPath);
+        });
+
+        //builder.Services.AddSingleton<InferenceSession>(
+        //  new InferenceSession("C:\\Users\\malea\\source\\repos\\INTEX_II_Group_4-3\\INTEX_II_Group_4-3\\FraudDetection.onnx")
+        //);
 
         var app = builder.Build();
 

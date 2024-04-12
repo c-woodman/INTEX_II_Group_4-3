@@ -1,32 +1,32 @@
-﻿@model Order
+﻿@model FraudPrediction
 
 @* transaction_ID, customer_ID, date, day_of_week, time, type_of_card, entry_mode,
 amount, type_of_transaction, country_of_transaction, shipping_address, bank, fraud *@
 <body>
     <div class="container mt-5">
         <form method="post" class="needs-validation" novalidate>
-            <input type="hidden" asp-for="TransactionId" />
-            <input type="hidden" asp-for="CustomerId" />
-            <input type="hidden" asp-for="Date" />
-            <input type="hidden" asp-for="DayOfWeek" />
-            <input type="hidden" asp-for="EntryMode" value="Null" />
-            <input type="hidden" asp-for="TypeOfTransaction" value="Online" />
-            <input type="hidden" asp-for="CountryOfTransaction" value="USA" />
-            <input type="hidden" asp-for="Fraud" value="USA" />
+            <input type="hidden" asp-for="Order.TransactionId" />
+            <input type="hidden" asp-for="Order.CustomerId" />
+            <input type="hidden" asp-for="Order.Date" />
+            <input type="hidden" asp-for="Order.DayOfWeek" />
+            <input type="hidden" asp-for="Order.EntryMode" value="Null" />
+            <input type="hidden" asp-for="Order.TypeOfTransaction" value="Online" />
+            <input type="hidden" asp-for="Order.CountryOfTransaction" value="USA" />
+            <input type="hidden" asp-for="Order.Fraud" value="USA" />
 
             
                 <!-- shipping address -->
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="ShippingAddress" class="form-label">Select Shipping Address:</label>
-                        <select asp-for="ShippingAddress" class="form-select" required>
+                    <label asp-for="Order.ShippingAddress" class="form-label">Select Shipping Address:</label>
+                    <select asp-for="Order.ShippingAddress" class="form-select" required>
                             <option value="USA">USA</option>
                             <option value="Russia">Russia</option>
                             <option value="United Kingdom">United Kingdom</option>
                             <option value="China">China</option>
                             <option value="Other">Other</option>
                         </select>
-                        <span asp-validation-for="ShippingAddress" class="invalid-feedback"></span>
+                        <span asp-validation-for="Order.ShippingAddress" class="invalid-feedback"></span>
                     </div>
                 </div>
            
@@ -36,12 +36,12 @@ amount, type_of_transaction, country_of_transaction, shipping_address, bank, fra
                 <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label asp-for="TypeOfCard" class="form-label">Select Card Payment Type:</label>
-                        <select asp-for="TypeOfCard" class="form-select" required>
+                        <label asp-for="Order.TypeOfCard" class="form-label">Select Card Payment Type:</label>
+                        <select asp-for="Order.TypeOfCard" class="form-select" required>
                             <option value="Visa">Visa</option>
                             <option value="MasterCard">MasterCard</option>
                         </select>
-                        <span asp-validation-for="TypeOfCard" class="invalid-feedback"></span>
+                        <span asp-validation-for="Order.TypeOfCard" class="invalid-feedback"></span>
                     </div>
                 </div>
 
@@ -50,8 +50,8 @@ amount, type_of_transaction, country_of_transaction, shipping_address, bank, fra
                 <!-- bank -->
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label asp-for="Bank" class="form-label">Select the bank associated with your card:</label>
-                        <select asp-for="Bank" class="form-select" required>
+                        <label asp-for="Order.Bank" class="form-label">Select the bank associated with your card:</label>
+                        <select asp-for="Order.Bank" class="form-select" required>
                             <option value="RBS">RBS</option>
                             <option value="Lloyds">Lloyds</option>
                             <option value="Barclays">Barclays</option>
@@ -61,7 +61,7 @@ amount, type_of_transaction, country_of_transaction, shipping_address, bank, fra
                             <option value="Metro">Metro</option>
                             <option value="Other">Other</option>
                         </select>
-                        <span asp-validation-for="Bank" class="invalid-feedback"></span>
+                        <span asp-validation-for="Order.Bank" class="invalid-feedback"></span>
                     </div>
                 </div>
             </div>
@@ -70,15 +70,15 @@ amount, type_of_transaction, country_of_transaction, shipping_address, bank, fra
                 <!-- Country of Transaction -->
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="CountryOfTransaction" class="form-label">Select your country of transaction:</label>
-                        <select asp-for="CountryOfTransaction" class="form-select" required>
+                    <label asp-for="Order.CountryOfTransaction" class="form-label">Select your country of transaction:</label>
+                        <select asp-for="Order.CountryOfTransaction" class="form-select" required>
                             <option value="USA">USA</option>
                             <option value="Russia">Russia</option>
                             <option value="United Kingdom">United Kingdom</option>
                             <option value="China">China</option>
                             <option value="Other">Other</option>
                         </select>
-                        <span asp-validation-for="CountryOfTransaction" class="invalid-feedback"></span>
+                    <span asp-validation-for="Order.CountryOfTransaction" class="invalid-feedback"></span>
                     </div>
                 </div>
 

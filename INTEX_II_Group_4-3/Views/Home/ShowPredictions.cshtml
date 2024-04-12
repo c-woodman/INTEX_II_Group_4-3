@@ -36,6 +36,7 @@
                 EntryMode,  TypeOfTransaction,  CountryOfTransaction,  ShippingAddress,  Bank,  TypeOfCard,  Fraud
                 <th>TransactionId</th>
                 <th>CustomerId</th>
+                <td>Date</td>
                 <th>Time</th>
                 <th>DayOfWeek</th>
                 <th>TypeOfTransaction</th>
@@ -50,6 +51,9 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>@item.Order.TransactionId</td>
+                    <td>@item.Order.CustomerId</td>
+                    <td>@item.Order.Date</td>
                     <td>@item.Order.Time</td>
                     <td>@item.Order.DayOfWeek</td>
                     <td>@item.Order.TypeOfTransaction</td>

@@ -109,14 +109,29 @@ namespace INTEX_II_Group_4_3.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Orders()
+        public IActionResult Orders(int pageNum = 1)
         {
+            int pageSize = 100; // Set the number of items per page
+
+            var ordersQuery = _repo.Orders.AsQueryable();
+
+            var viewModel = new OrdersListViewModel
+            {
+                Orders = ordersQuery.Skip((pageNum - 1) * pageSize).Take(pageSize),
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = ordersQuery.Count()  // Make sure to count before pagination
+                },
+            };
+
             var orders = _repo.Orders.ToList(); // Assuming '_context' is your database context
             if (orders == null)
             {
                 orders = new List<Order>(); // Initialize as empty if null to avoid null reference in the view
             }
-            return View(orders);
+            return View(viewModel);
         }
 
         public IActionResult About()

@@ -377,6 +377,7 @@ public async Task<IActionResult> Index()
             return NotFound();
         }
 
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
@@ -388,51 +389,98 @@ public async Task<IActionResult> Index()
                 var roleList = await _userManager.GetRolesAsync(user);
                 userRoles[user.Id] = roleList.FirstOrDefault() ?? "No role";
             }
-
             var viewModel = new UserManagementViewModel
             {
                 Users = users,
                 UserRoles = userRoles,
                 Roles = roles
             };
-
             return View(viewModel);
         }
+
+        [HttpGet]
+        public IActionResult AddUser()
+        {
+            var roles = _roleManager.Roles.Select(r => r.Name).ToList();
+            ViewBag.Roles = new SelectList(roles);
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddUser(AddUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(model.RoleName))
+                    {
+                        await _userManager.AddToRoleAsync(user, model.RoleName);
+                    }
+                    return RedirectToAction("Users");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+
+            // Reload roles in case of failure to preserve the dropdown list
+            ViewBag.Roles = new SelectList(_roleManager.Roles.Select(r => r.Name).ToList());
+            return View(model);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users(string userId, string newRole, string command)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            if (command == "EditRole")
             {
-                ModelState.AddModelError("", "User not found");
-                return View(); // Return to the same view with an error message
-            }
-
-            if (command == "EditRole" && !string.IsNullOrEmpty(newRole))
-            {
-                var currentRoles = await _userManager.GetRolesAsync(user);
-                var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
-                if (!removeResult.Succeeded)
-                {
-                    ModelState.AddModelError("", "Failed to remove old roles");
-                    return View(); // Show error message
-                }
-
-                var addRoleResult = await _userManager.AddToRoleAsync(user, newRole);
-                if (!addRoleResult.Succeeded)
-                {
-                    ModelState.AddModelError("", "Failed to add new role");
-                    return View(); // Show error message
-                }
+                return await EditRole(userId, newRole);
             }
             else if (command == "Delete")
             {
-                var result = await _userManager.DeleteAsync(user);
-                if (!result.Succeeded)
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user != null)
                 {
-                    ModelState.AddModelError("", "Failed to delete user");
-                    return View(); // Show error message
+                    var result = await _userManager.DeleteAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        _logger.LogError("Error deleting user.");
+                    }
+                }
+            }
+            return RedirectToAction("Users");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRole(string userId, string newRole)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            var removalResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            if (!removalResult.Succeeded)
+            {
+                _logger.LogError($"Failed to remove roles for user {user.Email}: {string.Join(", ", removalResult.Errors.Select(e => e.Description))}");
+            }
+
+            if (!string.IsNullOrEmpty(newRole))
+            {
+                var addToRoleResult = await _userManager.AddToRoleAsync(user, newRole);
+                if (!addToRoleResult.Succeeded)
+                {
+                    _logger.LogError($"Failed to add role for user {user.Email}: {string.Join(", ", addToRoleResult.Errors.Select(e => e.Description))}");
                 }
             }
 

@@ -1,47 +1,41 @@
 ﻿@model UserManagementViewModel
-
-<br>
-<div style="display: flex; justify-content: center;">
-<h1>Users</h1>
-    <br>    
-</div>
- 
-<div style="display: flex; justify-content: center;">
-<form method="post">
-    <table>
-            <a href="@Url.Action("AddUser", "Home")" class="button" style="text-decoration: none;">Add New User</a>
-            <br><br>
-        <thead>
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Current Role</th>
+            <th>Change Role To</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
             <tr>
-                <th>User</th>
-                <th>Current Role</th>
-                <th>Change Role To</th>
-                <th>Actions</th>
+                <td>@user.Email</td>
+                <td>@Model.UserRoles[user.Id]</td>
+                <td>
+                    <form asp-action="EditRole" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <select name="newRole">
+                            @foreach (var role in Model.Roles)
+                            {
+                                <!option value="@role.Name" 
+                                @(Model.UserRoles[user.Id] == role.Name ? "selected" : "")>
+                                @role.Name</!option>
+                            }
+                        </select>
+                        <button type="submit" name="command" value="EditRole">Update Role</button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="Users" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" name="command" value="Delete">Delete User</button>
+                    </form>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model.Users)
-            {
-                <tr>
-                    <td>@user.Email</td>
-                    <td>@Model.UserRoles[user.Id]</td>
-                    <td>
-                            <select name="newRole">
-                                @foreach (var role in Model.Roles)
-                                {
-                                    <option value="@role.Name">@role.Name</option>
-                                }
-                            </select>
-
-                    </td>
-                    <td>
-                        <button type="submit" name="command" value="EditRole" formaction="@Url.Action("Users", "Home", new { userId = user.Id })">Change Role</button>
-                        <button type="submit" name="command" value="Delete" formaction="@Url.Action("Users", "Home", new { userId = user.Id })">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-</form>
-</div>
+        }
+    </tbody>
+</table>
+<a href="@Url.Action("AddUser", "Home")" class="btn btn-primary">Add New User</a>

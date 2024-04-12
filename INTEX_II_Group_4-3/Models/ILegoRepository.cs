@@ -13,6 +13,8 @@ namespace INTEX_II_Group_4_3.Models
         public void RemoveProduct(Product product);
         public void UpdateProduct(Product product);
         public Product GetProductById(int productId);
+        public IQueryable<TopProductRecommendation> TopProductRecommendations();
+
         void AddOrder(Order o);
         Task SaveChangesAsync();
     }

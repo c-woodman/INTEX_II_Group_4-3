@@ -242,6 +242,7 @@ h2 {
 
 .pagination {
     display: flex;
+    flex-wrap: wrap;
 }
 
     .pagination .page {

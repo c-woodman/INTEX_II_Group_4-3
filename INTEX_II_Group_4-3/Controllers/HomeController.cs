@@ -84,11 +84,52 @@ namespace INTEX_II_Group_4_3.Controllers
         //    _context = context;
         //}
 
-        public IActionResult Index()
+        //public IActionResult Index(int productID)
+        //{
+        //    var recommendations = _repo.TopProductRecommendations(productID).FirstOrDefault(p => p.product_ID ==productID);
+        //    return View(recommendations);
+        //}
+
+        //public async Task<IActionResult> Index(int productID)
+        //{
+        //    var recommendations = await _repo.TopProductRecommendations(productID)
+        //        .FirstOrDefaultAsync(p => p.product_ID == productID);
+        //        //.ToList() // Convert to a list
+
+        //    return View(recommendations);
+        //}
+
+        //public async Task<IActionResult> Index(int productID)
+        //{
+        //    var recommendation = await _repo.TopProductRecommendations(productID)
+        //        .FirstOrDefaultAsync(p => p.product_ID == productID);
+
+        //    // Create a list with the single recommendation
+        //    var recommendationsList = new List<TopProductRecommendation>();
+        //    if (recommendation != null)
+        //    {
+        //        recommendationsList.Add(recommendation);
+        //    }
+
+        //    return View(recommendationsList);
+        //}
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var recommendations = await _repo.TopProductRecommendations()
+                .ToListAsync();
+
+            return View(recommendations);
         }
 
+
+
+
+        //public IActionResult Products()
+        //{
+        //    var products = _repo.Products.ToListAsync();
+        //    return View(products);
+        //}
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Products()
         {
@@ -112,14 +153,29 @@ namespace INTEX_II_Group_4_3.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Orders()
+        public IActionResult Orders(int pageNum = 1)
         {
+            int pageSize = 100; // Set the number of items per page
+
+            var ordersQuery = _repo.Orders.AsQueryable();
+
+            var viewModel = new OrdersListViewModel
+            {
+                Orders = ordersQuery.Skip((pageNum - 1) * pageSize).Take(pageSize),
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = ordersQuery.Count()  // Make sure to count before pagination
+                },
+            };
+
             var orders = _repo.Orders.ToList(); // Assuming '_context' is your database context
             if (orders == null)
             {
                 orders = new List<Order>(); // Initialize as empty if null to avoid null reference in the view
             }
-            return View(orders);
+            return View(viewModel);
         }
 
         public IActionResult About()

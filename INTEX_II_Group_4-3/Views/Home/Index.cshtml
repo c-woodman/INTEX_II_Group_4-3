@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-@model List<TopProductRecommendation>
+@model RecommendationListViewModel
 
 <div class="image-background">
     <div class="overlay-text">
@@ -40,31 +40,62 @@
 <div class="container">
     <h3>Recommended</h3>
     <br><br>
-    <div class="products-grid">
-
-        @{
-            int startIndex = 1; // Index for the second item
-            int endIndex = 4; // Index for the fifth item
-        }
-
-    @foreach (var product in Model)
-    {
-        int index = Model.IndexOf(product); // Get the current index of the product
-        if (index >= startIndex && index <= endIndex)
+    <div class="product-row">
+        <div class="product-card">
+        @if(User.Identity.IsAuthenticated)
         {
-            <div class="product-row" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = product.ProductRec.ProductId })'" style="cursor: pointer;">
+            @foreach (UserProductRecommendation product in Model.UserProductRecommendations)
+            {
                 <div class="product-card">
-                    <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
-                            <img src="@product.ProductRec.ImgLink" alt="Image for @product.ProductRec.Name" class="image-on-right">
-                    </div>
-                    <p>@product.ProductRec.Name</p>
-                    <p style="font-weight: bold;">$@product.ProductRec.Price.ToString("0.00")</p>
+                    <img src="@product.ImgLink" alt="@product.Name">
+                    <p>@product.Name</p>
+                    <p style="font-weight: bold;">$@product.Price.ToString("0.00")</p>
                 </div>
-            </div>
+            }
         }
-    }
+        else
+        {
+            @foreach (TopProductRecommendation product in Model.TopProductRecommendations)
+            {
+                <div class="product-card">
+                    <img src="@product.ImgLink" alt="@product.Name">
+                    <p>@product.Name</p>
+                    <p style="font-weight: bold;">$@product.Price.ToString("0.00")</p>
+                </div>
+            }
+        }
+
     </div>
     <br><br>
+                <p>@product.ProductRec.Name</p>
+                <p style="font-weight: bold;">$@product.ProductRec.Price.ToString("0.00")</p>
+            </div>
+        }
+    </div>
+    <br><br>
+
+@*     <h3>Recommended Products</h3>
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td><img src="@product.ProductRec.ImgLink" alt="@product.ProductRec.Name" /></td>
+                    <td>@product.ProductRec.Name</td>
+                    <td>$@product.ProductRec.Price.ToString("0.00")</td>
+                </tr>
+            }
+        </tbody>
+    </table> *@
 
     
     <div style="text-align: center;">

@@ -479,6 +479,7 @@ a img {
     font-family: 'DM Serif Display', sans-serif;
 }
 
+
 /* Parallax Background CSS */
 .parallax {
     background-image: url("/lib/img/background.jpg");
@@ -497,7 +498,7 @@ a img {
 .text-box {
     position: absolute;
     top: 35%;
-    left: 50%;
+    left: 55%;
     transform: translate(-50%, -50%);
     text-align: center;
     background: var(--mint); /* Make sure --mint is defined in your :root or somewhere in the CSS */
@@ -507,7 +508,16 @@ a img {
     padding-right: 80px;
     border-radius: 25px;
 }
-
+.image-box {
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    margin: 40px;
+    padding: 60px;
+    padding-left: 80px;
+    padding-right: 80px;
+}
 
 /* Add custom CSS styles for the navbar */
 .navbar {

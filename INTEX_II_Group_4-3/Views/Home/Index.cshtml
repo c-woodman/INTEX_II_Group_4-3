@@ -22,77 +22,49 @@
 
 <div class="parallax">
     <div class="text-box">
-        <p>Featured build</p>
-        <h2>Product Name</h2>
-        <a href='#' class="ghostButton" style="text-decoration: none; color: #FFBF00;">View Details</a>
+        @{
+            var product1 = Model.First(); 
+        }
+
+        <p>Featured Build</p>
+        <h2>@product1.ProductRec.Name</h2>
+        <br>
+        <a href='@Url.Action("ProductDetail", "Home", new { id = product1.ProductRec.ProductId })' class="ghostButton" style="text-decoration: none; color: #FFBF00;">View Details</a>
+    </div>
+    <div class="image-box" style="max-height: 400px; align-items: center; overflow: hidden;">
+        <img src="@product1.ProductRec.ImgLink" alt="Image for @product1.ProductRec.Name" style="width: 400px; height: 400px; object-fit: contain;">
     </div>
 </div>
 
 <br><br>
 <div class="container">
-@*     <h3>Recommended</h3>
-    <br><br>
-    <div class="product-row">
-        <div class="product-card">
-            <img src="path-to-your-image1.jpg" alt="Product 1">
-            <p>Product Title 1</p>
-        <p style="font-weight: bold;">$19.99</p>
-        </div>
-        <div class="product-card">
-            <img src="path-to-your-image2.jpg" alt="Product 2">
-            <p>Product Title 2</p>
-        <p style ="font-weight: bold;">$29.99</p>
-        </div>
-        <div class="product-card">
-            <img src="path-to-your-image3.jpg" alt="Product 3">
-            <p>Product Title 3</p>
-        <p style="font-weight: bold;">$39.99</p>
-        </div>
-        <div class="product-card">
-            <img src="path-to-your-image4.jpg" alt="Product 4">
-            <p>Product Title 4</p>
-        <p style="font-weight: bold;">$49.99</p>
-        </div>
-    </div> *@
-
-
     <h3>Recommended</h3>
     <br><br>
-    <div class="product-row">
+    <div class="products-grid">
 
-        @foreach (var product in Model)
+        @{
+            int startIndex = 1; // Index for the second item
+            int endIndex = 4; // Index for the fifth item
+        }
+
+    @foreach (var product in Model)
+    {
+        int index = Model.IndexOf(product); // Get the current index of the product
+        if (index >= startIndex && index <= endIndex)
         {
-            <div class="product-card">
-                <img src="@product.ProductRec.ImgLink" alt="@product.ProductRec.Name">
-                <p>@product.ProductRec.Name</p>
-                <p style="font-weight: bold;">$@product.ProductRec.Price.ToString("0.00")</p>
+            <div class="product-row" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = product.ProductRec.ProductId })'" style="cursor: pointer;">
+                <div class="product-card">
+                    <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                            <img src="@product.ProductRec.ImgLink" alt="Image for @product.ProductRec.Name" class="image-on-right">
+                    </div>
+                    <p>@product.ProductRec.Name</p>
+                    <p style="font-weight: bold;">$@product.ProductRec.Price.ToString("0.00")</p>
+                </div>
             </div>
         }
+    }
     </div>
     <br><br>
-
-@*     <h3>Recommended Products</h3>
-    <br />
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Model)
-            {
-                <tr>
-                    <td><img src="@product.ProductRec.ImgLink" alt="@product.ProductRec.Name" /></td>
-                    <td>@product.ProductRec.Name</td>
-                    <td>$@product.ProductRec.Price.ToString("0.00")</td>
-                </tr>
-            }
-        </tbody>
-    </table> *@
 
     
     <div style="text-align: center;">

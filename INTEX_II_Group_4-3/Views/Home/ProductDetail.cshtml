@@ -1,14 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-@model ProductRecommendation
+﻿@model ProductRecommendation
 <div class="container">
 
 <div>
-    <h2>@Model.ProductRec.Name</h2>
     <div>
         <div style="display: flex; align-items: center;">
             @if (!string.IsNullOrEmpty(Model.ProductRec.ImgLink))

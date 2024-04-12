@@ -7,40 +7,52 @@
     ViewData["Title"] = "Shop";
 }
 
-<span class="nowrap h3">Explore <span class="colorful letter">A</span><span class="colorful letter">u</span><span class="colorful letter">r</span><span class="colorful letter">o</span><span class="colorful letter">r</span><span class="colorful letter">a</span>'s Top Picks'</span>
+<span class="nowrap h3">Explore <span class="colorful letter">A</span><span class="colorful letter">u</span><span class="colorful letter">r</span><span class="colorful letter">o</span><span class="colorful letter">r</span><span class="colorful letter">a</span>'s Top Picks</span>
 
 <div class="row m-1 p-1">
     <div class="col-3">
         <vc:product-category />
+        <br />
+        <vc:product-color />
+        <br />
+        <form asp-action="Shop" method="get">
+            <select name="pageSize" onchange="this.form.submit()">
+                <option value="">Select display amount</option>
+                <option value="5">Display by 5</option>
+                <option value="10">Display by 10</option>
+                <option value="20">Display by 20</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="col-9">
+        @model ProductsListViewModel
+
+        <div class="products-grid">
+            <!-- Grid container -->
+            @foreach (Product p in Model.Products)
+            {
+                <div class="product-item" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = @p.ProductId })'" style="cursor: pointer;">
+                    <!-- Grid item -->
+                    @if (!string.IsNullOrEmpty(@p.ImgLink))
+                    {
+                        <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                            <img src="@p.ImgLink" alt="Image for @p.Name" style="width: 200px; height: 200px; object-fit: contain;">
+                        </div>
+                    }
+                    <p style="font-weight: bold;">@p.Name</p>
+                    <p>$@p.Price</p>
+                    <!-- Hide or remove the Show Details button as it's redundant now -->
+                </div>
+
+            }
+        </div>
+        <div class="pagination" style="display: flex; justify-content: center; align-items: center;">
+            @for (int i = 1; i <= Model.PaginationInfo.TotalNumPages; i++)
+            {
+                <a href="@Url.Action("Shop", new { pageNum = i, pageSize = Model.PaginationInfo.ItemsPerPage, productCategory = Model.CurrentProductCategory, productColor = Model.CurrentProductColor })" class="page @(Model.PaginationInfo.CurrentPage == i ? "active" : "")">@i</a>
+            }
+        </div>
     </div>
 </div>
 
-<div class="col-9">
-    @model ProductsListViewModel
-
-    <div class="products-grid">
-        <!-- Grid container -->
-        @foreach (Product p in Model.Products)
-        {
-            <div class="product-item" onclick="location.href='@Url.Action("ProductDetail", "Home", new { id = @p.ProductId })'" style="cursor: pointer;">
-                <!-- Grid item -->
-                @if (!string.IsNullOrEmpty(@p.ImgLink))
-                {
-                    <div style="flex: 1; max-height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
-                        <img src="@p.ImgLink" alt="Image for @p.Name" style="width: 200px; height: 200px; object-fit: contain;">
-                    </div>
-                }
-                <p style="font-weight: bold;">@p.Name</p>
-                <p>$@p.Price</p>
-                <!-- Hide or remove the Show Details button as it's redundant now -->
-            </div>
-
-        }
-    </div>
-    <div class="pagination" style="style=" display: flex; justify-content: center; align-items: center;">
-        @for (int i = 1; i <= Model.PaginationInfo.TotalNumPages; i++)
-        {
-            <a href="@Url.Action("Shop", new { pageNum = i, productCategory = Model.CurrentProductCategory })" class="page @(Model.PaginationInfo.CurrentPage == i ? "active" : "")">@i</a>
-        }
-    </div>
-</div>

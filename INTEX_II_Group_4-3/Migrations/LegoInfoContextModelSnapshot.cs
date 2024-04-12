@@ -254,6 +254,26 @@ namespace INTEX_II_Group_4_3.Migrations
                     b.ToTable("ProductRecommendations");
                 });
 
+            modelBuilder.Entity("INTEX_II_Group_4_3.Models.TopProductRecommendation", b =>
+                {
+                    b.Property<double>("product_ID")
+                        .HasColumnType("float");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("ratings_count")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ratings_mean")
+                        .HasColumnType("float");
+
+                    b.HasKey("product_ID");
+
+                    b.ToTable("TopProductRecommendations");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -505,6 +525,17 @@ namespace INTEX_II_Group_4_3.Migrations
                     b.Navigation("Product_4");
 
                     b.Navigation("Product_5");
+                });
+
+            modelBuilder.Entity("INTEX_II_Group_4_3.Models.TopProductRecommendation", b =>
+                {
+                    b.HasOne("INTEX_II_Group_4_3.Models.Product", "ProductRec")
+                        .WithMany()
+                        .HasForeignKey("product_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductRec");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

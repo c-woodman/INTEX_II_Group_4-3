@@ -6,11 +6,15 @@
 
 @model IQueryable<string>
 
-<div class="d-grid gap-2">
-    <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Shop" asp-route-productCategory="" asp-route-pageNum="">Reset Filter</a>
+<form asp-controller="Home" asp-action="Shop" method="get">
+    <div class="form-group">
+        <select class="form-control" id="productCategory" name="productCategory" onchange="this.form.submit();">
+            <option value="">Select a Category</option>
+            @foreach (string pt in Model ?? Enumerable.Empty<string>())
+            {
+                <option value="@pt">@pt</option>
+            }
+        </select>
+    </div>
+</form>
 
-    @foreach(string pt in Model ?? Enumerable.Empty<string>())
-    {
-        <a class="btn btn-secondary" asp-controller="Home" asp-action="Shop" asp-route-productCategory="@pt" asp-route-pageNum="1">@pt</a>
-    }
-</di>

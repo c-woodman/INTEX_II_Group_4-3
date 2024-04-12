@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace INTEX_II_Group_4_3.Models;
 
 public partial class Product
 {
-    public double ProductId { get; set; }
+
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int ProductId { get; set; }
 
     public string Name { get; set; } = null!;
 

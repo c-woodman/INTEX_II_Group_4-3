@@ -24,8 +24,11 @@ public partial class LegoInfoContext : IdentityDbContext<Customer>
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
+
     public virtual DbSet<ProductRecommendation> ProductRecommendations { get; set; }
     public virtual DbSet<TopProductRecommendation> TopProductRecommendations { get; set; }
+
+    public virtual DbSet<UserProductRecommendation> UserBasedRecommendations { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

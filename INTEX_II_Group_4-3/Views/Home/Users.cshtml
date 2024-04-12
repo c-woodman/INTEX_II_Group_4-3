@@ -1,0 +1,41 @@
+﻿@model UserManagementViewModel
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Current Role</th>
+            <th>Change Role To</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@Model.UserRoles[user.Id]</td>
+                <td>
+                    <form asp-action="EditRole" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <select name="newRole">
+                            @foreach (var role in Model.Roles)
+                            {
+                                <!option value="@role.Name" 
+                                @(Model.UserRoles[user.Id] == role.Name ? "selected" : "")>
+                                @role.Name</!option>
+                            }
+                        </select>
+                        <button type="submit" name="command" value="EditRole">Update Role</button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="Users" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" name="command" value="Delete">Delete User</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="@Url.Action("AddUser", "Home")" class="btn btn-primary">Add New User</a>

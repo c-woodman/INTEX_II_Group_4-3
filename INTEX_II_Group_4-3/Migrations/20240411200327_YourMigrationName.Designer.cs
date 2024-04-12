@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace INTEX_II_Group_4_3.Migrations
 {
     [DbContext(typeof(LegoInfoContext))]
-    [Migration("20240410163646_Initial")]
-    partial class Initial
+    [Migration("20240411200327_YourMigrationName")]
+    partial class YourMigrationName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace INTEX_II_Group_4_3.Migrations
 
             modelBuilder.Entity("INTEX_II_Group_4_3.Models.Customer", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
 
                     b.Property<double>("Age")
                         .HasColumnType("float")
@@ -41,22 +41,11 @@ namespace INTEX_II_Group_4_3.Migrations
                         .HasColumnType("date")
                         .HasColumnName("birth_date");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CountryOfResidence")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("country_of_residence");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -76,50 +65,9 @@ namespace INTEX_II_Group_4_3.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("last_name");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                    b.HasKey("CustomerId");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("INTEX_II_Group_4_3.Models.LineItem", b =>
@@ -145,8 +93,8 @@ namespace INTEX_II_Group_4_3.Migrations
 
             modelBuilder.Entity("INTEX_II_Group_4_3.Models.Order", b =>
                 {
-                    b.Property<int>("TransactionId")
-                        .HasColumnType("int")
+                    b.Property<double>("TransactionId")
+                        .HasColumnType("float")
                         .HasColumnName("transaction_ID");
 
                     b.Property<double>("Amount")
@@ -274,6 +222,61 @@ namespace INTEX_II_Group_4_3.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("INTEX_II_Group_4_3.Models.ProductRecommendation", b =>
+                {
+                    b.Property<double>("Product_ID")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Recommendation_1")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Recommendation_2")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Recommendation_3")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Recommendation_4")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Recommendation_5")
+                        .HasColumnType("float");
+
+                    b.HasKey("Product_ID");
+
+                    b.HasIndex("Recommendation_1");
+
+                    b.HasIndex("Recommendation_2");
+
+                    b.HasIndex("Recommendation_3");
+
+                    b.HasIndex("Recommendation_4");
+
+                    b.HasIndex("Recommendation_5");
+
+                    b.ToTable("ProductRecommendations");
+                });
+
+            modelBuilder.Entity("INTEX_II_Group_4_3.Models.TopProductRecommendation", b =>
+                {
+                    b.Property<double>("product_ID")
+                        .HasColumnType("float");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("ratings_count")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ratings_mean")
+                        .HasColumnType("float");
+
+                    b.HasKey("product_ID");
+
+                    b.ToTable("TopProductRecommendations");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -324,6 +327,71 @@ namespace INTEX_II_Group_4_3.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -411,6 +479,68 @@ namespace INTEX_II_Group_4_3.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("INTEX_II_Group_4_3.Models.ProductRecommendation", b =>
+                {
+                    b.HasOne("INTEX_II_Group_4_3.Models.Product", "ProductRec")
+                        .WithMany()
+                        .HasForeignKey("Product_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("INTEX_II_Group_4_3.Models.Product", "Product_1")
+                        .WithMany()
+                        .HasForeignKey("Recommendation_1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("INTEX_II_Group_4_3.Models.Product", "Product_2")
+                        .WithMany()
+                        .HasForeignKey("Recommendation_2")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("INTEX_II_Group_4_3.Models.Product", "Product_3")
+                        .WithMany()
+                        .HasForeignKey("Recommendation_3")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("INTEX_II_Group_4_3.Models.Product", "Product_4")
+                        .WithMany()
+                        .HasForeignKey("Recommendation_4")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("INTEX_II_Group_4_3.Models.Product", "Product_5")
+                        .WithMany()
+                        .HasForeignKey("Recommendation_5")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductRec");
+
+                    b.Navigation("Product_1");
+
+                    b.Navigation("Product_2");
+
+                    b.Navigation("Product_3");
+
+                    b.Navigation("Product_4");
+
+                    b.Navigation("Product_5");
+                });
+
+            modelBuilder.Entity("INTEX_II_Group_4_3.Models.TopProductRecommendation", b =>
+                {
+                    b.HasOne("INTEX_II_Group_4_3.Models.Product", "ProductRec")
+                        .WithMany()
+                        .HasForeignKey("product_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductRec");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -422,7 +552,7 @@ namespace INTEX_II_Group_4_3.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("INTEX_II_Group_4_3.Models.Customer", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -431,7 +561,7 @@ namespace INTEX_II_Group_4_3.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("INTEX_II_Group_4_3.Models.Customer", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -446,7 +576,7 @@ namespace INTEX_II_Group_4_3.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("INTEX_II_Group_4_3.Models.Customer", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -455,7 +585,7 @@ namespace INTEX_II_Group_4_3.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("INTEX_II_Group_4_3.Models.Customer", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

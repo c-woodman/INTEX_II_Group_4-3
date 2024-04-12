@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model OrdersListViewModel
+
+<div class = "container">
+    <div style="display: flex; justify-content: center;">
+        <h1>Orders</h1>
+        <br>    <br><br><br>
+    </div>
+<table>
+    <thead>
+        <tr>
+                <th>Transaction ID</th>
+                <th>Customer ID</th>
+                <th>Date</th>
+                <th>DayOfWeek</th>
+                <th>Time</th>
+                <th>EntryMode</th>
+                <th>Amount</th>
+                <th>Transaction Type</th>
+                <th>Transaction Country</th>
+                <th>Shipping Address</th>
+                <th>Bank</th>
+                <th>Card Type</th>
+                <th>Fraud</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr>
+                    <td>@order.TransactionId</td>
+                    <td>@order.CustomerId</td>
+                    <td>@order.Date</td>
+                    <td>@order.DayOfWeek</td>
+                    <td>@order.Time</td>
+                    <td>@order.EntryMode</td>
+                    <td>@order.Amount</td>
+                    <td>@order.TypeOfTransaction</td>
+                    <td style ="width: 150px !important;">@order.CountryOfTransaction</td>
+                    <td style="width: 150px !important;">@order.ShippingAddress</td>
+                    <td>@order.Bank</td>
+                    <td>@order.TypeOfCard</td>
+                    <td>@order.Fraud</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br>
+    <div class="pagination" style="style=" display: flex; justify-content: center; align-items: center;">
+        @for (int i = 1; i <= Model.PaginationInfo.TotalNumPages; i++)
+        {
+            <a href="@Url.Action("Shop", new { pageNum = i})" class="page @(Model.PaginationInfo.CurrentPage == i ? "active" : "")">@i</a>
+        }
+    </div>
+</div>

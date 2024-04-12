@@ -87,14 +87,38 @@ namespace INTEX_II_Group_4_3.Controllers
         //    return View(recommendations);
         //}
 
-        public async Task<IActionResult> Index(int productID)
+        //public async Task<IActionResult> Index(int productID)
+        //{
+        //    var recommendations = await _repo.TopProductRecommendations(productID)
+        //        .FirstOrDefaultAsync(p => p.product_ID == productID);
+        //        //.ToList() // Convert to a list
+
+        //    return View(recommendations);
+        //}
+
+        //public async Task<IActionResult> Index(int productID)
+        //{
+        //    var recommendation = await _repo.TopProductRecommendations(productID)
+        //        .FirstOrDefaultAsync(p => p.product_ID == productID);
+
+        //    // Create a list with the single recommendation
+        //    var recommendationsList = new List<TopProductRecommendation>();
+        //    if (recommendation != null)
+        //    {
+        //        recommendationsList.Add(recommendation);
+        //    }
+
+        //    return View(recommendationsList);
+        //}
+
+        public async Task<IActionResult> Index()
         {
-            var recommendations = await _repo.TopProductRecommendations(productID)
-                .FirstOrDefaultAsync(p => p.product_ID == productID);
-                //.ToList() // Convert to a list
+            var recommendations = await _repo.TopProductRecommendations()
+                .ToListAsync();
 
             return View(recommendations);
         }
+
 
 
 

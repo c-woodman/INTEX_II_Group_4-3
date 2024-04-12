@@ -5,7 +5,7 @@
         public IQueryable<Product> Products { get; }
 
         public IQueryable<ProductRecommendation> ProductRecommendations(int productId);
-        public IQueryable<TopProductRecommendation> TopProductRecommendations(int productId);
+        public IQueryable<TopProductRecommendation> TopProductRecommendations();
 
         void AddOrder(Order o);
     }

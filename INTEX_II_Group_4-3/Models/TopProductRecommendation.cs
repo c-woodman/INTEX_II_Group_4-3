@@ -13,7 +13,7 @@ namespace INTEX_II_Group_4_3.Models
         public Product ProductRec { get; set; }
 
         //[ForeignKey("Product_1")]
-        public double ratings_count { get; set; }
+        public int ratings_count { get; set; }
         //public Product Product_1 { get; set; }
 
         //[ForeignKey("Product_2")]

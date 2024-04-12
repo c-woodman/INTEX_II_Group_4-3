@@ -3,12 +3,14 @@
 <br>
 <div style="display: flex; justify-content: center;">
 <h1>Users</h1>
-    <br>    <br><br><br>
+    <br>    
 </div>
-
+ 
 <div style="display: flex; justify-content: center;">
 <form method="post">
     <table>
+            <a href="@Url.Action("AddUser", "Home")" class="button" style="text-decoration: none;">Add New User</a>
+            <br><br>
         <thead>
             <tr>
                 <th>User</th>
@@ -39,7 +41,5 @@
             }
         </tbody>
     </table>
-
-    <a href="@Url.Action("AddUser", "Home")" class="btn btn-primary">Add New User</a>
 </form>
 </div>

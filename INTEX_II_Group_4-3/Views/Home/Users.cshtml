@@ -1,43 +1,53 @@
 ﻿@model UserManagementViewModel
 
-<br>
-<div style="display: flex; justify-content: center;">
-<h1>Users</h1>
-    <br>    <br><br><br>
-</div>
+<div class="container">
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h1>Users</h1>
+        <br>
+        <a style="text-decoration: none; href="@Url.Action("AddUser", "Home")" class="button">Add New User</a>
+        <br><br>
+    </div>
 
-<div style="display: flex; justify-content: center;">
-<form method="post">
+    <div style="display: flex; justify-content: center;">
+        <br>
+        <br>
     <table>
-        <thead>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Current Role</th>
+            <th>Change Role To</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
             <tr>
-                <th>User</th>
-                <th>Current Role</th>
-                <th>Change Role To</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model.Users)
-            {
-                <tr>
-                    <td>@user.Email</td>
-                    <td>@Model.UserRoles[user.Id]</td>
-                    <td>
+                <td>@user.Email</td>
+                <td>@Model.UserRoles[user.Id]</td>
+                <td>
+                    <form asp-action="EditRole" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
                         <select name="newRole">
                             @foreach (var role in Model.Roles)
                             {
-                                <option value="@role.Name">@role.Name</option>
+                                <!option value="@role.Name" 
+                                @(Model.UserRoles[user.Id] == role.Name ? "selected" : "")>
+                                @role.Name</!option>
                             }
                         </select>
-                    </td>
-                    <td>
-                        <button type="submit" name="command" value="EditRole" formaction="@Url.Action("Users", "Home", new { userId = user.Id })">Change Role</button>
-                        <button type="submit" name="command" value="Delete" formaction="@Url.Action("Users", "Home", new { userId = user.Id })">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</form>
-</div>
+                        <button type="submit" name="command" value="EditRole">Update Role</button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="Users" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" name="command" value="Delete">Delete User</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+    </div>

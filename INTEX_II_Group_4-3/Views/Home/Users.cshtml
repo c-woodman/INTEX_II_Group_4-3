@@ -1,5 +1,17 @@
 ﻿@model UserManagementViewModel
-<table>
+
+<div class="container">
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h1>Users</h1>
+        <br>
+        <a style="text-decoration: none; href="@Url.Action("AddUser", "Home")" class="button">Add New User</a>
+        <br><br>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+        <br>
+        <br>
+    <table>
     <thead>
         <tr>
             <th>User</th>
@@ -38,4 +50,4 @@
         }
     </tbody>
 </table>
-<a href="@Url.Action("AddUser", "Home")" class="btn btn-primary">Add New User</a>
+    </div>

@@ -14,6 +14,7 @@ using Microsoft.ML.OnnxRuntime.Tensors;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace INTEX_II_Group_4_3.Controllers
 {
@@ -255,10 +256,67 @@ namespace INTEX_II_Group_4_3.Controllers
 
 public async Task<IActionResult> Index()
         {
-            var recommendations = await _repo.TopProductRecommendations()
-                .ToListAsync();
+                int pageSize = 20;
 
-    return View(recommendations);
+                // User 6 Query 
+                var UserQuery = _repo.Products
+                    .Join(_repo.UserProductRecommendations,
+                          product => product.ProductId,
+                          UserRec => UserRec.ProductId,
+                          (product, UserRec) => new { product, UserRec })
+                    .Select(joinedItem => new UserProductRecommendation
+                    {
+                        ProductId = joinedItem.product.ProductId,
+                        Name = joinedItem.product.Name,
+                        Year = joinedItem.product.Year,
+                        NumParts = joinedItem.product.NumParts,
+                        Price = joinedItem.product.Price,
+                        ImgLink = joinedItem.product.ImgLink,
+                        PrimaryColor = joinedItem.product.PrimaryColor,
+                        SecondaryColor = joinedItem.product.SecondaryColor,
+                        Description = joinedItem.product.Description,
+                        Category = joinedItem.product.Category
+                    });
+
+                var UserRec = UserQuery
+                    .Take(pageSize)
+                    .ToList(); // Materialize the query to execute it
+
+                // Top 20 Query 
+                var query = _repo.Products
+                    .Join(_repo.TopProductRecommendations,
+                          product => product.ProductId,
+                          top_20_product => top_20_product.ProductId,
+                          (product, top_20_product) => new { product, top_20_product })
+                    .Select(joinedItem => new TopProductRecommendation
+                    {
+                        ProductId = joinedItem.product.ProductId,
+                        Name = joinedItem.product.Name,
+                        Year = joinedItem.product.Year,
+                        NumParts = joinedItem.product.NumParts,
+                        Price = joinedItem.product.Price,
+                        ImgLink = joinedItem.product.ImgLink,
+                        PrimaryColor = joinedItem.product.PrimaryColor,
+                        SecondaryColor = joinedItem.product.SecondaryColor,
+                        Description = joinedItem.product.Description,
+                        Category = joinedItem.product.Category
+                    });
+
+
+                var products = query
+                    .Take(pageSize)
+                    .ToList(); // Materialize the query to execute it
+
+                var setup = new RecommendationListViewModel
+                {
+                    TopProductRecommendations = products,
+                    UserProductRecommendations = UserRec
+
+                };
+
+                // Pass the viewModel to the "ProductDisplay" view
+                return View(setup);
+            
         }
 
 
@@ -462,7 +520,6 @@ public async Task<IActionResult> Index()
 
             return View(viewModel);
         }
-
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users(string userId, string newRole, string command)
@@ -470,18 +527,25 @@ public async Task<IActionResult> Index()
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                // Optionally add error handling here
-                return RedirectToAction("Users");
+                ModelState.AddModelError("", "User not found");
+                return View(); // Return to the same view with an error message
             }
 
             if (command == "EditRole" && !string.IsNullOrEmpty(newRole))
             {
                 var currentRoles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, currentRoles);
-                var result = await _userManager.AddToRoleAsync(user, newRole);
-                if (!result.Succeeded)
+                var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (!removeResult.Succeeded)
                 {
-                    // Optionally handle errors here
+                    ModelState.AddModelError("", "Failed to remove old roles");
+                    return View(); // Show error message
+                }
+
+                var addRoleResult = await _userManager.AddToRoleAsync(user, newRole);
+                if (!addRoleResult.Succeeded)
+                {
+                    ModelState.AddModelError("", "Failed to add new role");
+                    return View(); // Show error message
                 }
             }
             else if (command == "Delete")
@@ -489,12 +553,14 @@ public async Task<IActionResult> Index()
                 var result = await _userManager.DeleteAsync(user);
                 if (!result.Succeeded)
                 {
-                    // Optionally handle errors here
+                    ModelState.AddModelError("", "Failed to delete user");
+                    return View(); // Show error message
                 }
             }
 
             return RedirectToAction("Users");
         }
+
     }
 }
 

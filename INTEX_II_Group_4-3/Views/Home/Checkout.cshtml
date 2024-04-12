@@ -81,9 +81,17 @@ amount, type_of_transaction, country_of_transaction, shipping_address, bank, fra
                         <span asp-validation-for="CountryOfTransaction" class="invalid-feedback"></span>
                     </div>
                 </div>
+
+            <br />
+            <div class="col-md-6">
+                <div>
+                    <label>Total Amount: </label>
+                </div>
+            </div>
+
             
             <!-- Submit Button -->
-            @if (!User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            @if (User.Identity.IsAuthenticated)
             {
                 <div class="form-group mt-3">
                     <button type="submit" class="button">Submit</button>
@@ -96,8 +104,6 @@ amount, type_of_transaction, country_of_transaction, shipping_address, bank, fra
                     <a href="/Identity/Account/Login" class="button">Login</a>
                 </div>
             }
-
-            <input type="hidden" asp-for="Amount" value="" />
         </form>
     </div>
 </body>

@@ -3,12 +3,14 @@
 <br>
 <div style="display: flex; justify-content: center;">
 <h1>Users</h1>
-    <br>    <br><br><br>
+    <br>    
 </div>
-
+ 
 <div style="display: flex; justify-content: center;">
 <form method="post">
     <table>
+            <a href="@Url.Action("AddUser", "Home")" class="button" style="text-decoration: none;">Add New User</a>
+            <br><br>
         <thead>
             <tr>
                 <th>User</th>
@@ -24,12 +26,13 @@
                     <td>@user.Email</td>
                     <td>@Model.UserRoles[user.Id]</td>
                     <td>
-                        <select name="newRole">
-                            @foreach (var role in Model.Roles)
-                            {
-                                <option value="@role.Name">@role.Name</option>
-                            }
-                        </select>
+                            <select name="newRole">
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <option value="@role.Name">@role.Name</option>
+                                }
+                            </select>
+
                     </td>
                     <td>
                         <button type="submit" name="command" value="EditRole" formaction="@Url.Action("Users", "Home", new { userId = user.Id })">Change Role</button>
@@ -39,5 +42,6 @@
             }
         </tbody>
     </table>
+
 </form>
 </div>

@@ -116,10 +116,67 @@ namespace INTEX_II_Group_4_3.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var recommendations = await _repo.TopProductRecommendations()
-                .ToListAsync();
+                int pageSize = 20;
 
-            return View(recommendations);
+                // User 6 Query 
+                var UserQuery = _repo.Products
+                    .Join(_repo.UserProductRecommendations,
+                          product => product.ProductId,
+                          UserRec => UserRec.ProductId,
+                          (product, UserRec) => new { product, UserRec })
+                    .Select(joinedItem => new UserProductRecommendation
+                    {
+                        ProductId = joinedItem.product.ProductId,
+                        Name = joinedItem.product.Name,
+                        Year = joinedItem.product.Year,
+                        NumParts = joinedItem.product.NumParts,
+                        Price = joinedItem.product.Price,
+                        ImgLink = joinedItem.product.ImgLink,
+                        PrimaryColor = joinedItem.product.PrimaryColor,
+                        SecondaryColor = joinedItem.product.SecondaryColor,
+                        Description = joinedItem.product.Description,
+                        Category = joinedItem.product.Category
+                    });
+
+                var UserRec = UserQuery
+                    .Take(pageSize)
+                    .ToList(); // Materialize the query to execute it
+
+                // Top 20 Query 
+                var query = _repo.Products
+                    .Join(_repo.TopProductRecommendations,
+                          product => product.ProductId,
+                          top_20_product => top_20_product.ProductId,
+                          (product, top_20_product) => new { product, top_20_product })
+                    .Select(joinedItem => new TopProductRecommendation
+                    {
+                        ProductId = joinedItem.product.ProductId,
+                        Name = joinedItem.product.Name,
+                        Year = joinedItem.product.Year,
+                        NumParts = joinedItem.product.NumParts,
+                        Price = joinedItem.product.Price,
+                        ImgLink = joinedItem.product.ImgLink,
+                        PrimaryColor = joinedItem.product.PrimaryColor,
+                        SecondaryColor = joinedItem.product.SecondaryColor,
+                        Description = joinedItem.product.Description,
+                        Category = joinedItem.product.Category
+                    });
+
+
+                var products = query
+                    .Take(pageSize)
+                    .ToList(); // Materialize the query to execute it
+
+                var setup = new RecommendationListViewModel
+                {
+                    TopProductRecommendations = products,
+                    UserProductRecommendations = UserRec
+
+                };
+
+                // Pass the viewModel to the "ProductDisplay" view
+                return View(setup);
+            
         }
 
 

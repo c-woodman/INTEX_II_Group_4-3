@@ -6,9 +6,21 @@
 
 @model IQueryable<string>
 
-<form asp-controller="Home" asp-action="Shop" method="get">
-    <div class="form-group">
-        <select class="form-control" id="productCategory" name="productCategory" onchange="this.form.submit();">
+<div style="flex: 1 !important;">
+    <form asp-controller="Home" asp-action="Shop" method="get">
+        <select id="productCategory" name="productCategory" onchange="this.form.submit();">
+            <option value="">Select a Category</option>
+            @foreach (string pt in Model ?? Enumerable.Empty<string>())
+            {
+                <option value="@pt">@pt</option>
+            }
+        </select>
+    </form>
+</div>
+
+@* <form asp-controller="Home" asp-action="Shop" method="get">
+    <div class="">
+        <select class="" id="productCategory" name="productCategory" onchange="this.form.submit();">
             <option value="">Select a Category</option>
             @foreach (string pt in Model ?? Enumerable.Empty<string>())
             {
@@ -16,5 +28,5 @@
             }
         </select>
     </div>
-</form>
+</form> *@
 

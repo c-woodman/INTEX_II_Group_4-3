@@ -13,9 +13,9 @@ public partial class Order
 
     public DateOnly Date { get; set; }
 
-    public string DayOfWeek { get; set; } = null!;
+    public string? DayOfWeek { get; set; } = null!;
 
-    public double Time { get; set; }
+    public double? Time { get; set; }
 
     public string EntryMode { get; set; } = null!;
 

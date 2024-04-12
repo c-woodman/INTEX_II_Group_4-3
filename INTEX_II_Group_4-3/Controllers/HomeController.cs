@@ -293,9 +293,10 @@ public async Task<IActionResult> Index()
         [HttpPost]
         public IActionResult Checkout(Order l)
         {
-            var data = l;
+             
+            _repo.AddOrder(l);
 
-            return View("Confirmation");
+            return View("Confirmation", l);
         }
 
         [HttpPost]

@@ -7,24 +7,32 @@
     ViewData["Title"] = "Shop";
 }
 
-<span class="nowrap h3">Explore <span class="colorful letter">A</span><span class="colorful letter">u</span><span class="colorful letter">r</span><span class="colorful letter">o</span><span class="colorful letter">r</span><span class="colorful letter">a</span>'s Top Picks</span>
+<div class = "container" style="font-family: 'DM Serif Display', sans-serif;font-size: 50px;">
+<span class="nowrap">Explore <span class="colorful letter">A</span><span class="colorful letter">u</span><span class="colorful letter">r</span><span class="colorful letter">o</span><span class="colorful letter">r</span><span class="colorful letter">a</span>'s Top Picks</span>
+</div>
 
-<div class="row m-1 p-1">
-    <div class="col-3">
-        <vc:product-category />
-        <br />
-        <vc:product-color />
-        <br />
-        <form asp-action="Shop" method="get">
-            <select name="pageSize" onchange="this.form.submit()">
-                <option value="">Select display amount</option>
-                <option value="5">Display by 5</option>
-                <option value="10">Display by 10</option>
-                <option value="20">Display by 20</option>
-            </select>
-        </form>
-    </div>
+<div class="row" style="display: flex !important; padding: 50px; margin-left: 70px; gap: 5px;">
+    <vc:product-category style="flex: 1 !important;" />
 
+    <vc:product-color style="flex: 1 !important;" />
+
+    <form asp-action="Shop" method="get" style="flex: 1 !important;">
+        <select name="pageSize" onchange="this.form.submit()">
+            <option value="">Select display amount</option>
+            <option value="5">Display by 5</option>
+            <option value="10">Display by 10</option>
+            <option value="20">Display by 20</option>
+        </select>
+    </form>
+
+    <a class="btn btn-outline-secondary" style="flex: 1 !important;" asp-controller="Home" asp-action="Shop" asp-route-productColor="" asp-route-pageNum="1">Reset Filter</a>
+</div>
+
+
+
+
+
+<div class="row m-1 p-1" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <div class="col-9">
         @model ProductsListViewModel
 

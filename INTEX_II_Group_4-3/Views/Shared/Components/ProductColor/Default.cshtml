@@ -6,10 +6,19 @@
 
 @model IQueryable<string>
 
-<div class="d-grid gap-2">
-    <form asp-controller="Home" asp-action="Shop" method="get">
-        <div class="form-group">
-            <select class="form-control" id="productColor" name="productColor" onchange="this.form.submit();">
+<form asp-controller="Home" asp-action="Shop" method="get" style="flex: 1 !important;">
+    <select id="productColor" name="productColor" onchange="this.form.submit();">
+        <option value="">Select a Color</option>
+        @foreach (string pc in Model ?? Enumerable.Empty<string>())
+        {
+            <option value="@pc">@pc</option>
+        }
+    </select>
+</form>
+
+@*     <form asp-controller="Home" asp-action="Shop" method="get">
+        <div class="">
+            <select class="" id="productColor" name="productColor" onchange="this.form.submit();">
                 <option value="">Select a Color</option>
                 @foreach (string pc in Model ?? Enumerable.Empty<string>())
                 {
@@ -19,4 +28,4 @@
         </div>
     </form>
     <a class="btn btn-outline-secondary mt-2" asp-controller="Home" asp-action="Shop" asp-route-productColor="" asp-route-paeNum="1">Reset Filter</a>
-</div>
+ *@

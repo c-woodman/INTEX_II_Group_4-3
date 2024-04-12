@@ -7,7 +7,7 @@ namespace INTEX_II_Group_4_3.Models;
 
 public partial class Order
 {
-    public double TransactionId { get; set; }
+    public int TransactionId { get; set; }
 
     public double CustomerId { get; set; }
 

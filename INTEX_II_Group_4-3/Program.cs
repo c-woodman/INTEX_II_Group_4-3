@@ -19,6 +19,12 @@ public class Program
 
         builder.Services.AddRazorPages();
 
+        builder.Services.AddHsts(options =>
+        {
+            options.Preload = true;
+            options.IncludeSubDomains = true;
+        });
+
         builder.Services.AddDistributedMemoryCache();
         builder.Services.AddSession();
 
@@ -81,6 +87,7 @@ public class Program
 
         //    await next();
         //});
+
 
         app.MapControllerRoute(
             name: "default",
